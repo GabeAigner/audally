@@ -1,6 +1,5 @@
 package com.audally.backend.entity;
 
-
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.Entity;
@@ -28,9 +27,8 @@ public class User extends PanacheEntity {
     @NotNull
     public Date joinDate;
     @OneToMany
-    public List<Membership> memberships;
+    public List<Subscription> memberships;
     @OneToMany
     @JoinColumn(name = "user_id")
     public List<Course> courses;
-
 }

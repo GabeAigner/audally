@@ -10,12 +10,15 @@ import java.util.Date;
 
 @Entity
 @NotNull
-@Table(name = "Membership",schema = "audallydb")
-public class Membership extends PanacheEntity {
-    public MembershipType membershipType;
+@Table(name = "Subscription",schema = "audallydb")
+public class Subscription extends PanacheEntity {
     public Date subscriptionDate;
     public Date expiryDate;
     public boolean cancelSubscription = false;
+
+    @ManyToOne
+    public SubscriptionType subscriptionType;
+
     @ManyToOne
     public User user;
 }
