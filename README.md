@@ -1,4 +1,8 @@
-# audally-web
+# Audally-Web
+
+![Build and Deploy](https://github.com/gabrielaigner/audally-web/workflows/Build%20and%20Deploy/badge.svg)
+
+Audally is an open source project. We collect all our frontend code in this repository and give everyone the chance to see the code and contribute to it. Audally-Web contains a lot of code, design mockups and more.
 
 ## Build Setup
 
