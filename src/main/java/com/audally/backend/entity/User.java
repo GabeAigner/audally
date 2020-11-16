@@ -23,8 +23,10 @@ public class User extends PanacheEntity {
     @NotNull
     @NotEmpty
     public String password;
+    /*
     @NotNull
     public Date joinDate;
+    */
     @OneToMany(mappedBy = "user")
     public List<Subscription> subscriptions;
     @OneToMany
