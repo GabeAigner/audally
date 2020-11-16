@@ -3,7 +3,6 @@ package com.audally.backend.entity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -13,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "User",schema = "audallydb")
+@Table(name = "users",schema = "audally")
 public class User extends PanacheEntity {
     @NotNull
     @NotEmpty(message = "Not allowed to be empty!")
@@ -26,9 +25,8 @@ public class User extends PanacheEntity {
     public String password;
     @NotNull
     public Date joinDate;
+    @OneToMany(mappedBy = "user")
+    public List<Subscription> subscriptions;
     @OneToMany
-    public List<Subscription> memberships;
-    @OneToMany
-    @JoinColumn(name = "user_id")
     public List<Course> courses;
 }

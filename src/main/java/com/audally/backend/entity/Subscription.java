@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @NotNull
-@Table(name = "Subscription",schema = "audallydb")
+@Table(name = "subscriptions",schema = "audally")
 public class Subscription extends PanacheEntity {
     public Date subscriptionDate;
     public Date expiryDate;
