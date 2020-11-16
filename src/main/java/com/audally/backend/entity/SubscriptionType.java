@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "SubscriptionType",schema = "audallydb")
+@Table(name = "subscription_types", schema = "audally")
 public class SubscriptionType extends PanacheEntity {
     public String name;
 }

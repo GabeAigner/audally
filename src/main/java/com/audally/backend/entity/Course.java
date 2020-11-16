@@ -11,14 +11,14 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "Course",schema = "audallydb")
+@Table(name = "courses",schema = "audally")
 public class Course extends PanacheEntity {
     @NotNull
     public String name;
     @Max(400)
     public String description;
 
-    @OneToMany
-    public List<Lection> lections;
+    @OneToMany(mappedBy = "course")
+    public List<Lesson> lessons;
 
 }

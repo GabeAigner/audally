@@ -11,15 +11,14 @@ import javax.validation.constraints.NotNull;
 import java.sql.Time;
 
 @Entity
-@Table(name = "Lection",schema = "audallydb")
-public class Lection extends PanacheEntity {
+@Table(name = "lessons",schema = "audally")
+public class Lesson extends PanacheEntity {
     @NotNull
     public String name;
     @Max(400)
     public String description;
     @URL
     public String audioUrl;
-
     public Time duration;
 
     @ManyToOne
