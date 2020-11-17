@@ -8,7 +8,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,10 +22,6 @@ public class User extends PanacheEntity {
     @NotNull
     @NotEmpty
     public String password;
-    /*
-    @NotNull
-    public Date joinDate;
-    */
     @OneToMany(mappedBy = "user")
     public List<Subscription> subscriptions;
     @OneToMany
