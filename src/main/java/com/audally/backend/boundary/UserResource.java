@@ -15,7 +15,8 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Produces(APPLICATION_JSON)
 public class UserResource {
     @POST
-    @Path("addCourse/{UserId}-{CourseId}")
+    //          addCourse/1-21
+    @Path("/{UserId}/courses/{CourseId}")
     public Response addCourseToUser(@PathParam("UserId") int Uid,@PathParam("CourseId") int Cid){
         User user = User.findById(Uid);
         user.courses.add(Course.findById(Cid));
