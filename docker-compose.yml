@@ -1,16 +1,40 @@
 version: '3.5'
-services:
-  postgres:
-    container_name: audallydb
-    image: postgres:11.6
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: postgres
-    volumes:
-       - postgres:/data/postgresBrain
-    ports:
-      - "5432:5432"
-    restart: unless-stopped
+
 
 volumes:
   postgres:
+      driver: local
+
+services:
+  postgres:
+    container_name: postgres1
+    image: postgres:11.6
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+       - postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+   
+  keycloak:
+    container_name: keycloak1
+    image: jboss/keycloak:10.0.0
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres1
+      DB_DATABASE: postgres
+      DB_USER: postgres
+      DB_SCHEMA: keycloak1
+      DB_PASSWORD: postgres
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    ports:
+      - 8081:8080
+    depends_on:
+      - postgres
+
+
