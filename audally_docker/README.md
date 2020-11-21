@@ -29,3 +29,5 @@ A handy command to delete all existing volumes:
 ```bash
 docker volume rm $(docker volume ls -q)
 ```
+
+For more information on docker-compose with Keycloak visit: https://hub.docker.com/r/jboss/keycloak/
