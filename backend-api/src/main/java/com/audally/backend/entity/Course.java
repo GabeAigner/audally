@@ -32,15 +32,22 @@ public class Course implements Serializable {
     @Size(max = 400)
     public String description;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course",fetch = FetchType.EAGER)
     public List<Lesson> lessons = new ArrayList<Lesson>();
 
     public Course(){
 
+    }
+    public void addLessons(Lesson lesson){
+        this.lessons.add(lesson);
+    }
+    public List<Lesson> getLessons(){
+        return this.lessons;
     }
     public void copyProperties(Course course) {
         this.name = course.name;
         this.lessons = course.lessons;
         this.description = course.description;
     }
+
 }
