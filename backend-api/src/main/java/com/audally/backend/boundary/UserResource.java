@@ -1,22 +1,22 @@
 package com.audally.backend.boundary;
 
-import com.arjuna.ats.arjuna.common.Uid;
+
+import io.quarkus.security.identity.SecurityIdentity;
+import org.jboss.resteasy.annotations.cache.NoCache;
+import javax.annotation.security.RolesAllowed;
 import com.audally.backend.control.CourseRepository;
 import com.audally.backend.control.UserRepository;
 import com.audally.backend.entity.Course;
 import com.audally.backend.entity.User;
-import io.quarkus.security.identity.SecurityIdentity;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.lang.module.ResolutionException;
-import java.util.List;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path("/users")
 @Produces(APPLICATION_JSON)
+@Transactional
 public class UserResource {
     @Inject
     UserRepository userRepository;
@@ -31,7 +31,6 @@ public class UserResource {
     public SecurityIdentity getUserInfo(){
         return identity;
     }
-
     @GET
     @NoCache
     @Path("/secret")
@@ -39,31 +38,85 @@ public class UserResource {
     public String getAdminInfo(){
         return "This is an Admin.";
     }
-
+    @GET
+    @Path("/{UserId}")
+    public Response getUser(@PathParam("UserId") Long uid){
+        return Response.ok(userRepository.findById(uid)).build();
+    }
     @POST
     @Path("addCourse/{UserId}-{CourseId}")
-    public Response addCourseToUser(@PathParam("UserId") Long Uid,@PathParam("CourseId") Long Cid){
-        User user = userRepository.findById(Uid);
-        Course course = courseRepository.findById(Cid);
+    public Response addCourseToUser(@PathParam("UserId") Long uid
+            ,@PathParam("CourseId") Long cid){
+        User user = userRepository.findById(uid);
+        Course course = courseRepository.findById(cid);
+        if(user == null){
+            return Response
+                    .status(Response.Status.NO_CONTENT)
+                    .header("User was not found!",User.class)
+                    .build();
+        }
+        else if(course == null){
+            return Response
+                    .status(Response.Status.NO_CONTENT)
+                    .header("Course was not found!",Course.class)
+                    .build();
+        }
         user.courses.add(course);
-        user.userName = "New John";
-        //userRepository.merge(user);
-        userRepository.update("update from users_courses set course = ?1",user.courses.listIterator());
-        //userRepository.flush();
-        return Response.ok(userRepository.findById(Uid)).build();
+        userRepository.getEntityManager().merge(user);
+        return Response.ok(userRepository.findById(uid)).build();
     }
     @POST
     @Path("addUser")
     public Response addUser(User user){
         User entry = new User();
-        entry.properties(user);
+        if(userRepository.isPersistent(user) == true){
+            return Response
+                    .status(Response.Status.FOUND)
+                    .header("User was found",User.class)
+                    .build();
+        }
+        entry.copyProperties(user);
         userRepository.persist(entry);
         return Response.ok(entry).build();
     }
 
-    @GET
-    @Path("/{UserId}")
-    public Response getUser(@PathParam("UserId") Long Uid){
-        return Response.ok(userRepository.findById(Uid)).build();
+    @DELETE
+    @Path("{id}")
+    public Response deleteUser(@PathParam("id")Long uid){
+        if (userRepository.findById(uid) != null){
+            userRepository.deleteById(uid);
+            return Response.status(Response.Status.GONE)
+                    .header("User deleted!",User.class)
+                    .build();
+        }
+        return Response.noContent().build();
+    }
+    @DELETE
+    @Path("removeCourse/{id}-{cid}")
+    public Response removeCourse(@PathParam("id")Long uid
+            ,@PathParam("cid")Long cid){
+        User change = userRepository.findById(uid);
+        if(change != null){
+            change.courses.remove(cid);
+            userRepository.getEntityManager().merge(change);
+            return Response.status(Response.Status.GONE)
+                    .header("Course removed from User",User.class)
+                    .build();
+        }
+        return Response.noContent().build();
+    }
+    @PUT
+    @Path("{id}")
+    public Response updateUser(@PathParam("id")Long uid,User user){
+        User updated = userRepository.findById(uid);
+        if (updated != null &&
+                userRepository.isPersistent(user) == false){
+            updated.copyProperties(user);
+            userRepository.getEntityManager().merge(updated);
+            return Response.status(Response.Status.FOUND)
+                    .header("User updated!",User.class)
+                    .build();
+        }
+        return Response.noContent().build();
     }
 }
