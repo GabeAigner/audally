@@ -11,11 +11,5 @@ import javax.transaction.Transactional;
 @ApplicationScoped
 @Transactional
 public class UserRepository implements PanacheRepositoryBase<User,Long> {
-    @PersistenceContext
-    EntityManager em = getEntityManager();
-
-    public void merge(User user){
-        em.merge(user);
-    }
 
 }
