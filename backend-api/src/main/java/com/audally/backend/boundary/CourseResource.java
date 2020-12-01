@@ -3,6 +3,7 @@ package com.audally.backend.boundary;
 import com.audally.backend.control.CourseRepository;
 import com.audally.backend.entity.Course;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
@@ -14,6 +15,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Path("/courses")
 @Produces(APPLICATION_JSON)
 @Transactional
+@ApplicationScoped
 public class CourseResource {
 
     @Inject
