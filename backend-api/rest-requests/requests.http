@@ -1,6 +1,6 @@
 #### User Requests
 
-GET http://localhost:8080/api/users/1
+GET http://localhost:8080/api/users/3
 Content-Type: application/json
 
 ###
@@ -22,24 +22,44 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/api/users/addCourse/3-3
+POST http://localhost:8080/api/users/addCourse/3-1
 Content-Type: application/json
 
 #### Course Requests
+
 
 GET http://localhost:8080/api/courses
 Content-Type: application/json
 
 ###
-POST http://localhost:8080/api/courses/addCourse
+POST http://localhost:8080/api/courses
 Content-Type: application/json
 
 {
   "description": "created by a Pablo",
-  "name": "testCourse"
+  "name": "testCourse",
+  "lessons": [
+
+  ]
+}
+###
+DELETE http://localhost:8080/api/courses/5
+
+###
+PUT http://localhost:8080/api/courses/1
+Content-Type: application/json
+
+{
+  "name": "How to !Startup",
+  "description": "Hello, this course is for you to see the usual problems of Startups.",
+  "lessons": []
 }
 
 #### Lessons Requests
+
+###
+GET http://localhost:8080/api/lessons/1
+
 ###
 POST http://localhost:8080/api/lessons/addLessonsToCourse/1
 Content-Type: application/json
@@ -56,6 +76,17 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8080/api/lessons/rmvLessonsFromCourse/1
+Content-Type: application/json
+
+[
+  {
+    "name": "TutorialNr1",
+    "description": "A Tutorial on how to create your own Audally's",
+    "audioUrl": "http://localhost:8080",
+    "duration": "00:12:54",
+    "course_id": 1
+  }
+]
 
 
 #### Multipart
