@@ -25,7 +25,7 @@ public class LessonResource {
     CourseRepository courseRepository;
 
     @GET
-    @Path("/{id}")
+    @Path("getLessonOfCourse/{id}")
     public Response getLessonsOfCourse(@PathParam("id") Long cid){
         Course read = courseRepository.findById(cid);
         if(read == null)return Response.noContent().build();
@@ -39,7 +39,15 @@ public class LessonResource {
         Arrays.stream(lessons)
                 .forEach(l -> {
 //                    lessonRepository.persist(l);
-                    read.lessons.add(lessonRepository.getEntityManager().merge(l));
+                  /*Lesson created = new Lesson();
+                    created.copyProperties(l);
+                    read.addLessons((lessonRepository.getEntityManager().merge(created)));
+                    */
+                    Lesson created = new Lesson();
+                    created.copyProperties(l);
+                    created.setCourse(read);
+                    lessonRepository.persist(created);
+                    read.addLessons(lessonRepository.findById(created.id));
                 });
         courseRepository.getEntityManager().merge(read);
         return Response.ok(courseRepository.findById(cid)).build();
