@@ -8,6 +8,8 @@ import com.audally.backend.control.CourseRepository;
 import com.audally.backend.control.UserRepository;
 import com.audally.backend.entity.Course;
 import com.audally.backend.entity.User;
+
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
@@ -17,6 +19,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Path("/users")
 @Produces(APPLICATION_JSON)
 @Transactional
+@ApplicationScoped
 public class UserResource {
     @Inject
     UserRepository userRepository;
@@ -61,7 +64,7 @@ public class UserResource {
                     .header("Course was not found!",Course.class)
                     .build();
         }
-        user.courses.add(course);
+        user.addCourses(course);
         userRepository.getEntityManager().merge(user);
         return Response.ok(userRepository.findById(uid)).build();
     }
