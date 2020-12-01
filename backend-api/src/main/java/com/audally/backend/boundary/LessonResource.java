@@ -5,6 +5,7 @@ import com.audally.backend.control.LessonRepository;
 import com.audally.backend.entity.Course;
 import com.audally.backend.entity.Lesson;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
@@ -16,6 +17,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Path("/lessons")
 @Produces(APPLICATION_JSON)
 @Transactional
+@ApplicationScoped
 public class LessonResource {
     @Inject
     LessonRepository lessonRepository;
