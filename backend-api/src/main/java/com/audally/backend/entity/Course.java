@@ -37,9 +37,9 @@ public class Course implements Serializable {
     public Course(){
 
     }
-    public void properties(Course course) {
+    public void copyProperties(Course course) {
         this.name = course.name;
-        this.description = course.description;
         this.lessons = course.lessons;
+        this.description = course.description;
     }
 }
