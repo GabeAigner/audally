@@ -40,7 +40,7 @@ public class User implements Serializable {
     */
     @OneToMany(mappedBy = "user")
     public List<Subscription> subscriptions = new ArrayList<Subscription>();
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     public List<Course> courses = new ArrayList<Course>();
     public User(){ }
 
@@ -50,5 +50,53 @@ public class User implements Serializable {
         this.courses = user.courses;
         this.userName = user.userName;
         this.password = user.password;
+    }
+
+    public void addCourses(Course courses) {
+        this.courses.add(courses);
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", subscriptions=" + subscriptions.toArray().toString() +
+                ", courses=" + courses.toArray().toString() +
+                '}';
     }
 }
