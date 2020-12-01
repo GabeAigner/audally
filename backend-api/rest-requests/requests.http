@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/api/users/addCourse/3-1
+POST http://localhost:8080/api/users/addCourse/2-1
 Content-Type: application/json
 
 #### Course Requests
@@ -38,9 +38,7 @@ Content-Type: application/json
 {
   "description": "created by a Pablo",
   "name": "testCourse",
-  "lessons": [
-
-  ]
+  "lessons": []
 }
 ###
 DELETE http://localhost:8080/api/courses/5
