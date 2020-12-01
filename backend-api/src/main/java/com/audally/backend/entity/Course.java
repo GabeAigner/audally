@@ -20,7 +20,8 @@ public class Course implements Serializable {
     @SequenceGenerator(
             name = "courseSequence",
             sequenceName = "course_id_seq",
-            initialValue = 4
+            initialValue = 4,
+            allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.IDENTITY

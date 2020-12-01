@@ -19,7 +19,8 @@ public class Lesson implements Serializable {
     @SequenceGenerator(
             name = "lessonSequence",
             sequenceName = "lesson_id_seq",
-            initialValue = 1
+            initialValue = 1,
+            allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.IDENTITY

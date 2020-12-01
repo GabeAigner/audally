@@ -19,7 +19,8 @@ public class User implements Serializable {
     @SequenceGenerator(
             name = "userSequence",
             sequenceName = "user_id_seq",
-            initialValue = 3
+            initialValue = 3,
+            allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.IDENTITY

@@ -14,7 +14,8 @@ public class Subscription{
     @SequenceGenerator(
             name = "subscriptionSequence",
             sequenceName = "sub_id_seq",
-            initialValue = 1
+            initialValue = 1,
+            allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.IDENTITY

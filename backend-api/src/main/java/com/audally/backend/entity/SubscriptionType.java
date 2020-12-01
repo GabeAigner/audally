@@ -12,7 +12,8 @@ public class SubscriptionType implements Serializable {
     @SequenceGenerator(
             name = "subTypeSequence",
             sequenceName = "sub_type_id_seq",
-            initialValue = 1
+            initialValue = 1,
+            allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
