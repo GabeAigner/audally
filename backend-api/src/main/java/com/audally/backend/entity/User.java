@@ -3,6 +3,7 @@ package com.audally.backend.entity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import org.jboss.resteasy.spi.touri.MappedBy;
 
+import javax.annotation.processing.Generated;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -41,7 +42,7 @@ public class User implements Serializable {
     */
     @OneToMany(mappedBy = "user")
     public List<Subscription> subscriptions = new ArrayList<Subscription>();
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     public List<Course> courses = new ArrayList<Course>();
     public User(){ }
 
