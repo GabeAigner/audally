@@ -47,7 +47,7 @@ public class UserResource {
         return Response.ok(userRepository.findById(uid)).build();
     }
     @POST
-    @Path("addCourse/{UserId}-{CourseId}")
+    @Path("{UserId}/courses/{CourseId}")
     public Response addCourseToUser(@PathParam("UserId") Long uid
             ,@PathParam("CourseId") Long cid){
         User user = userRepository.findById(uid);
