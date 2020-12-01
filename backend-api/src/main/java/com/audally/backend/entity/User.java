@@ -1,6 +1,7 @@
 package com.audally.backend.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import org.jboss.resteasy.spi.touri.MappedBy;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -43,14 +44,11 @@ public class User implements Serializable {
     public List<Course> courses = new ArrayList<Course>();
     public User(){ }
 
-    public void properties(User user) {
+    public void copyProperties(User user) {
         this.email = user.email;
         this.subscriptions = user.subscriptions;
         this.courses = user.courses;
         this.userName = user.userName;
         this.password = user.password;
-    }
-    public void setCourses(List<Course> course){
-        this.courses = course;
     }
 }
