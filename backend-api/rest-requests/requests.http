@@ -1,0 +1,68 @@
+#### User Requests
+
+GET http://localhost:8080/api/users/1
+Content-Type: application/json
+
+###
+POST http://localhost:8080/api/users/addUser
+Content-Type: application/json
+
+{
+  "courses": [
+    {
+      "description": "The course to achieve a healthier and happier life.",
+      "id": 3,
+      "lessons": [],
+      "name": "Start to be happy!"
+    }
+  ],
+  "userName": "Pablo",
+  "password": "test",
+  "email": "pablo@email.at"
+}
+
+###
+POST http://localhost:8080/api/users/addCourse/3-3
+Content-Type: application/json
+
+#### Course Requests
+
+GET http://localhost:8080/api/courses
+Content-Type: application/json
+
+###
+POST http://localhost:8080/api/courses/addCourse
+Content-Type: application/json
+
+{
+  "description": "created by a Pablo",
+  "name": "testCourse"
+}
+
+#### Lessons Requests
+###
+POST http://localhost:8080/api/lessons/addLessonsToCourse/1
+Content-Type: application/json
+
+[
+  {
+    "name": "TutorialNr1",
+    "description": "A Tutorial on how to create your own Audally's",
+    "audioUrl": "http://localhost:8080",
+    "duration": "00:12:54",
+    "course_id": 1
+  }
+]
+
+###
+DELETE http://localhost:8080/api/lessons/rmvLessonsFromCourse/1
+
+
+#### Multipart
+
+POST http://localhost:8080/api/echo
+Content-Type: multipart/form-data
+
+###
+POST http://localhost:8080/api/client/multipart
+Content-Type: text/plain
