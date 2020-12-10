@@ -11,6 +11,8 @@
     "lint": "npm run lint:js"
   },
   "dependencies": {
+    "@nuxtjs/auth-next": "^5.0.0-1607600955.506103a",
+    "@nuxtjs/axios": "^5.12.3",
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6"
   },
