@@ -46,6 +46,18 @@ public class UserResource {
     public Response getUser(@PathParam("UserId") Long uid){
         return Response.ok(userRepository.findById(uid)).build();
     }
+    @GET
+    @Path("/{UserId}/courses")
+    public Response getCoursesOfUser(@PathParam("UserId") Long uid){
+        User user = userRepository.findById(uid);
+        if(user == null){
+            return Response
+                    .status(Response.Status.NO_CONTENT)
+                    .header("User was not found!",User.class)
+                    .build();
+        }
+        return Response.ok(user.courses).build();
+    }
     @POST
     @Path("{UserId}/courses/{CourseId}")
     public Response addCourseToUser(@PathParam("UserId") Long uid
