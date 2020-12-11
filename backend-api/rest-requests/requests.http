@@ -1,9 +1,11 @@
 #### User Requests
 
+### Get User by id
+
 GET http://localhost:8080/api/users/2
 Content-Type: application/json
 
-###
+### Persist a user with a course! V.1.0
 POST http://localhost:8080/api/users/addUser
 Content-Type: application/json
 
@@ -20,8 +22,20 @@ Content-Type: application/json
   "password": "test",
   "email": "pablo@email.at"
 }
+### Persist a user with a course! V.2.0
+POST http://localhost:8080/api/users/addUser
+Content-Type: application/json
 
-###
+{
+  "userName": "Pablo",
+  "password": "test",
+  "email": "pablo@email.at"
+}
+
+### Get Courses of the User!
+GET http://localhost:8080/api/users/1/courses
+
+### Add Course to User
 POST http://localhost:8080/api/users/1/courses/2
 Content-Type: application/json
 
