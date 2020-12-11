@@ -6,16 +6,12 @@
 
 <script>
 export default {
-  name: 'LoginVue',
-  auth: 'guest',
   methods: {
     async login() {
       try {
         const response = await this.$auth.loginWith('keycloak')
-        // eslint-ignore-next-line
         console.log(response)
       } catch (err) {
-        // eslint-ignore-next-line
         console.log(err)
       }
     },

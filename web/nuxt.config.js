@@ -32,12 +32,14 @@ export default {
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: ['@nuxtjs/axios', '@nuxtjs/auth-next'],
+
   axios: {
     /* baseURL: 'https://localhost:8180/',
     browserBaseURL: 'https://localhost:8180/', */
     proxyHeaders: true,
     proxy: true,
   },
+
   auth: {
     strategies: {
       local: false,
@@ -71,13 +73,13 @@ export default {
         codeChallengeMethod: 'S256',
       },
     },
-
     redirect: {
       login: '/',
       home: '/',
       logout: '/',
     },
   },
+
   router: {
     middleware: ['auth'],
   },

@@ -1,5 +1,7 @@
 <template>
   <div class="bg-gray-800 min-h-screen">
+    <LoginButton v-if="!$auth.loggedIn"></LoginButton>
+    <LogoutButton v-else></LogoutButton>
     <ul
       v-if="courses.length != 0"
       class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4"
