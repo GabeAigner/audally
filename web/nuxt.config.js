@@ -31,13 +31,12 @@ export default {
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/auth-next'
-  ],
-
-  auth: {
-    // Options
+  modules: ['@nuxtjs/axios', '@nuxtjs/auth-next'],
+  axios: {
+    /* baseURL: 'https://localhost:8180/',
+    browserBaseURL: 'https://localhost:8180/', */
+    proxyHeaders: true,
+    proxy: true,
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
