@@ -38,6 +38,49 @@ export default {
     proxyHeaders: true,
     proxy: true,
   },
+  auth: {
+    strategies: {
+      local: false,
+      keycloak: {
+        scheme: 'oauth2',
+        endpoints: {
+          authorization:
+            'http://localhost:8180/auth/realms/audally/protocol/openid-connect/auth',
+          token:
+            'http://localhost:8180/auth/realms/audally/protocol/openid-connect/token',
+          userInfo:
+            'http://localhost:8180/auth/realms/audally/protocol/openid-connect/userinfo',
+          logout:
+            'http://localhost:8180/auth/realms/audally/protocol/openid-connect/logout?redirect_uri=' +
+            encodeURIComponent('http://localhost:3000'),
+        },
+        token: {
+          property: 'access_token',
+          type: 'Bearer',
+          name: 'Authorization',
+          maxAge: 300,
+        },
+        refreshToken: {
+          property: 'refresh_token',
+          maxAge: 60 * 60 * 24 * 30,
+        },
+        clientId: 'web',
+        responseType: 'code',
+        grantType: 'authorization_code',
+        scope: ['openid', 'profile', 'email'],
+        codeChallengeMethod: 'S256',
+      },
+    },
+
+    redirect: {
+      login: '/',
+      home: '/',
+      logout: '/',
+    },
+  },
+  router: {
+    middleware: ['auth'],
+  },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
