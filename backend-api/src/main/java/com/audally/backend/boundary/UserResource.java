@@ -47,6 +47,22 @@ public class UserResource {
         return Response.ok(userRepository.findById(uid)).build();
     }
     @GET
+    @Path("/{email}")
+    public Response getUserByEmail(@PathParam("email") String username){
+        User user = (User) userRepository.find("email",username);
+        if(user == null){
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .header(username,User.class)
+                    .build();
+        }
+        User businessuser = new User();
+        businessuser.id = user.id;
+        businessuser.courses = user.courses;
+
+        return Response.ok(businessuser).build();
+    }
+    @GET
     @Path("/{UserId}/courses")
     public Response getCoursesOfUser(@PathParam("UserId") Long uid){
         User user = userRepository.findById(uid);
