@@ -13,6 +13,12 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
+  // Environment variables (https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-env)
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    backendUrl: 'http://localhost:8080/api',
+  },
+
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [],
 
