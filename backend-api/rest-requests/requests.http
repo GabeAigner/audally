@@ -35,6 +35,9 @@ Content-Type: application/json
 ### Get Courses of the User!
 GET http://localhost:8080/api/users/1/courses
 
+### Get User by email, Only returns ID and courses!!
+GET http://localhost:8080/api/users/email@gmail.com
+
 ### Add Course to User
 POST http://localhost:8080/api/users/1/courses/2
 Content-Type: application/json
