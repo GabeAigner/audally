@@ -123,7 +123,7 @@ public class UserResource {
         return Response.noContent().build();
     }
     @DELETE
-    @Path("{id}/course/{cid}")
+    @Path("{id}/courses/{cid}")
     public Response removeCourse(@PathParam("id")Long uid
             ,@PathParam("cid")Long cid){
         User change = userRepository.findById(uid);

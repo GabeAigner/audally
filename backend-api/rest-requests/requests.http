@@ -43,7 +43,7 @@ POST http://localhost:8080/api/users/1/courses/2
 Content-Type: application/json
 
 ### Delete Course from User.
-DELETE http://localhost:8080/api/users/1/course/2
+DELETE http://localhost:8080/api/users/1/courses/2
 
 
 #### Course Requests
