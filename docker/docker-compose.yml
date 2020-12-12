@@ -29,6 +29,7 @@ services:
         KEYCLOAK_PASSWORD: admin
       ports:
         - 8180:8080
+      command: -Dkeycloak.profile.feature.upload_scripts=enabled
       depends_on:
         - postgres
 
