@@ -2,17 +2,14 @@
   <div class="bg-gray-800 min-h-screen">
     <LoginButton v-if="!$auth.loggedIn"></LoginButton>
     <LogoutButton v-else></LogoutButton>
-    <ul
-      v-if="courses.length != 0"
-      class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4"
-    >
-      <CoursePreview
-        v-for="course in courses"
-        :key="course.id"
-        :name="course.name"
-        :description="course.description"
-      ></CoursePreview>
-    </ul>
+    <FeaturedCourses
+      v-if="courses.length != 0 && !$auth.loggedIn"
+      :courses="courses"
+    ></FeaturedCourses>
+    <PersonalCourses
+      v-else-if="$auth.loggedIn"
+      :courses="courses"
+    ></PersonalCourses>
     <div v-else class="p-4">
       <li
         class="flex flex-col text-center bg-gray-700 rounded-lg shadow-md p-8"
