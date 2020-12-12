@@ -1,6 +1,6 @@
 <template>
-  <li>
-    <div class="h-24 bg-gray-700 rounded-t-lg">
+  <li class="bg-cover bg-center rounded-lg">
+    <div class="h-24 bg-gray-700 rounded-t-lg bg-opacity-50">
       <div class="inline-block float-right p-4">
         <button class="focus:outline-none rounded-full">
           <svg
@@ -28,7 +28,7 @@
       <!-- Thumbnail image -->
     </div>
     <div
-      class="flex flex-col text-center bg-gray-700 rounded-b-lg shadow-md p-8"
+      class="flex flex-col text-center bg-gray-700 rounded-b-lg shadow-md p-8 bg-opacity-50"
     >
       <div class="text-left">
         <p class="text-white font-medium text-xl">{{ name }}</p>
@@ -47,4 +47,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+li {
+  background-image: url('https://images.unsplash.com/photo-1513644183929-03d571e0bf5c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+</style>
