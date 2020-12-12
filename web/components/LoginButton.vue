@@ -1,5 +1,5 @@
 <template>
-  <div class="sm:p-4 mb-8 sm:mb-0 rounded-lg flex justify-end">
+  <div>
     <button
       class="bg-gray-700 shadow-md p-4 rounded-lg text-white hover:shadow-none"
       @click="login"

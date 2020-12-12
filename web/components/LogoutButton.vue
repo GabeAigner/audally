@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4">
+  <div class="">
     <button class="bg-gray-400 p-4 rounded-lg" @click="logout">Logout</button>
   </div>
 </template>
