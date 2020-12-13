@@ -15,7 +15,10 @@
         </div>
       </li>-->
     </div>
-    <PersonalCourses v-if="$auth.loggedIn" :courses="courses"></PersonalCourses>
+    <PersonalCourses
+      v-if="$auth.loggedIn"
+      :courses="personalCourses"
+    ></PersonalCourses>
   </div>
 </template>
 
@@ -23,7 +26,11 @@
 export default {
   async fetch() {
     if (this.$auth.loggedIn) {
-      /* fetch personal courses */
+      let user
+      await fetch('http://localhost:8080/api/users/1') //  + this.$auth.user.email
+        .then((response) => response.json())
+        .then((data) => (user = data))
+      console.log(user)
     }
     await fetch('http://localhost:8080/api/courses')
       .then((response) => response.json())
