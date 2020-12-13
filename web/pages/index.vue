@@ -25,16 +25,20 @@
 <script>
 export default {
   async fetch() {
+    await fetch('http://localhost:8080/api/courses')
+      .then((response) => response.json())
+      .then((data) => (this.courses = data))
     if (this.$auth.loggedIn) {
       let user
       await fetch('http://localhost:8080/api/users/1') //  + this.$auth.user.email
         .then((response) => response.json())
         .then((data) => (user = data))
-      console.log(user)
+      if (user !== undefined) {
+        await fetch('http://localhost:8080/api/users/' + user.id + '/courses')
+          .then((response) => response.json())
+          .then((data) => (this.personalCourses = data))
+      }
     }
-    await fetch('http://localhost:8080/api/courses')
-      .then((response) => response.json())
-      .then((data) => (this.courses = data))
   },
   data() {
     return {
