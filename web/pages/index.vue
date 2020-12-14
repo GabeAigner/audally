@@ -16,7 +16,7 @@
       </li>-->
     </div>
     <PersonalCourses
-      v-if="$auth.loggedIn"
+      v-if="personalCourses != 0"
       :courses="personalCourses"
     ></PersonalCourses>
   </div>
