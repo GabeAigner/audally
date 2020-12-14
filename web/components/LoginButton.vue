@@ -14,11 +14,8 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await this.$auth.loginWith('keycloak')
-        console.log(response)
-      } catch (err) {
-        console.log(err)
-      }
+        await this.$auth.loginWith('keycloak')
+      } catch (err) {}
     },
   },
 }

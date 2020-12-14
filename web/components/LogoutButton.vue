@@ -9,11 +9,8 @@ export default {
   methods: {
     async logout() {
       try {
-        const response = await this.$auth.logout('keycloak')
-        console.log(response)
-      } catch (err) {
-        console.log(err)
-      }
+        await this.$auth.logout('keycloak')
+      } catch (err) {}
     },
   },
 }
