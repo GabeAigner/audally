@@ -7,8 +7,9 @@
       <CoursePreview
         v-for="course in courses"
         :key="course.id"
-        :name="course.name"
-        :description="course.description"
+        :course="course"
+        listtype="featured"
+        :user="userId"
       ></CoursePreview>
     </ul>
   </div>
@@ -16,7 +17,20 @@
 
 <script>
 export default {
-  props: ['courses'],
+  props: {
+    userId: {
+      type: Number,
+      default: -1,
+    },
+  },
+  computed: {
+    courses() {
+      if (this.$store.state.courses === undefined) {
+        return null
+      }
+      return this.$store.state.courses
+    },
+  },
 }
 </script>
 
