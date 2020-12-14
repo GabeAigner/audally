@@ -7,8 +7,7 @@
       <CoursePreview
         v-for="course in courses"
         :key="course.id"
-        :name="course.name"
-        :description="course.description"
+        :course="course"
       ></CoursePreview>
     </ul>
   </div>
