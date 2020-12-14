@@ -16,7 +16,11 @@
 
 <script>
 export default {
-  props: ['courses'],
+  computed: {
+    courses() {
+      return this.$store.state.personalCourses
+    },
+  },
 }
 </script>
 
