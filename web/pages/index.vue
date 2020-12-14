@@ -3,6 +3,7 @@
     <ButtonBar></ButtonBar>
     <FeaturedCourses
       v-if="this.$store.state.courses.length != 0"
+      :user-id="user.id"
     ></FeaturedCourses>
     <div v-else class="p-4">
       <CoursePreviewSkeleton></CoursePreviewSkeleton>
@@ -28,16 +29,22 @@ export default {
       .then((data) => (this.courses = data))
     this.$store.commit('setCourses', this.courses)
     if (this.$auth.loggedIn) {
-      let user
-      await fetch('http://localhost:8080/api/users/1') //  + this.$auth.user.email
+      await fetch('http://localhost:8080/api/users/' + this.$auth.user.email) //  + this.$auth.user.email
         .then((response) => response.json())
-        .then((data) => (user = data))
-      if (user !== undefined) {
-        await fetch('http://localhost:8080/api/users/' + user.id + '/courses')
+        .then((data) => (this.user = data))
+      if (this.user !== undefined) {
+        await fetch(
+          'http://localhost:8080/api/users/' + this.user.id + '/courses'
+        )
           .then((response) => response.json())
           .then((data) => (this.personalCourses = data))
         this.$store.commit('setPersonalCourses', this.personalCourses)
       }
+    }
+  },
+  data() {
+    return {
+      user: {},
     }
   },
   fetchOnServer: false,
