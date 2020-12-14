@@ -62,7 +62,21 @@ export default {
     },
   },
   methods: {
-    addCourse(e) {},
+    addCourse(e) {
+      if (this.listtype === 'featured') {
+        this.$store.commit('addPersonalCourse', this.course)
+        fetch(
+          process.env.backendUrl +
+            '/users/' +
+            this.userId +
+            '/courses/' +
+            this.course.id,
+          {
+            method: 'post',
+          }
+        )
+      }
+    },
   },
 }
 </script>
