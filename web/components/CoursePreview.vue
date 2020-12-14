@@ -2,7 +2,7 @@
   <li class="bg-cover bg-center rounded-lg">
     <div class="h-24 bg-gray-700 rounded-t-lg bg-opacity-50">
       <div class="inline-block float-right p-4">
-        <button class="focus:outline-none rounded-full">
+        <button class="focus:outline-none rounded-full" @click="addCourse">
           <svg
             class="w-10 h-10 text-gray-400 hover:text-gray-100 duration-200"
             fill="none"
@@ -31,8 +31,8 @@
       class="flex flex-col text-center bg-gray-700 rounded-b-lg shadow-md p-8 bg-opacity-50"
     >
       <div class="text-left">
-        <p class="text-white font-medium text-xl">{{ name }}</p>
-        <p class="text-gray-400">{{ description }}</p>
+        <p class="text-white font-medium text-xl">{{ course.name }}</p>
+        <p class="text-gray-400">{{ course.description }}</p>
       </div>
     </div>
   </li>
@@ -41,8 +41,28 @@
 <script>
 export default {
   props: {
-    name: String,
-    description: String,
+    listtype: {
+      default: 'featured',
+      type: String,
+    },
+    userId: {
+      type: Number,
+      default: -1,
+    },
+    course: {
+      type: Object,
+      default() {
+        return {
+          id: 1,
+          name: 'Default',
+          lessons: [],
+          description: 'Default',
+        }
+      },
+    },
+  },
+  methods: {
+    addCourse(e) {},
   },
 }
 </script>
