@@ -54,8 +54,7 @@ public class UserResource {
         User user = userRepository.find("email",username).firstResult();
         if(user == null){
             return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .header(username,User.class)
+                    .status(204,"User could not be found!")
                     .build();
         }
         businessuser = new JSONObject();
@@ -88,12 +87,12 @@ public class UserResource {
         }
         if(user == null){
             return Response
-                    .status(202,"User was not found!")
+                    .status(204,"User was not found!")
                     .build();
         }
         else if(course == null){
             return Response
-                    .status(202,"Course was not found!")
+                    .status(204,"Course was not found!")
                     .build();
         }
         user.addCourses(course);
