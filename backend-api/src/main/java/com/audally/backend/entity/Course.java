@@ -2,6 +2,7 @@ package com.audally.backend.entity;
 
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -31,7 +32,8 @@ public class Course implements Serializable {
     public String name;
     @Size(max = 400)
     public String description;
-
+    @URL
+    public String pictureUrl;
     @OneToMany(mappedBy = "course",fetch = FetchType.EAGER)
     public List<Lesson> lessons = new ArrayList<Lesson>();
 
@@ -48,6 +50,7 @@ public class Course implements Serializable {
         this.name = course.name;
         this.lessons = course.lessons;
         this.description = course.description;
+        this.pictureUrl = course.pictureUrl;
     }
 
 }
