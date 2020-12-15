@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h1 class="px-4 text-gray-300 text-3xl font-bold">Personal Courses</h1>
+    <h1 class="px-4 text-3xl font-bold text-gray-300">Personal Courses</h1>
     <ul
-      class="sm:p-4 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+      class="grid grid-cols-1 gap-6 sm:p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
     >
       <CoursePreview
         v-for="course in courses"
