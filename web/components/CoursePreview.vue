@@ -1,10 +1,10 @@
 <template>
-  <li class="bg-cover bg-center rounded-lg">
-    <div class="h-24 bg-gray-700 rounded-t-lg bg-opacity-50">
+  <li class="bg-center bg-cover rounded-lg">
+    <div class="h-24 bg-gray-700 bg-opacity-50 rounded-t-lg">
       <div class="inline-block float-right p-4">
-        <button class="focus:outline-none rounded-full" @click="addCourse">
+        <button class="rounded-full focus:outline-none" @click="addCourse">
           <svg
-            class="w-10 h-10 text-gray-400 hover:text-gray-100 duration-200"
+            class="w-10 h-10 text-gray-400 duration-200 hover:text-gray-100"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -28,10 +28,10 @@
       <!-- Thumbnail image -->
     </div>
     <div
-      class="flex flex-col text-center bg-gray-700 rounded-b-lg shadow-md p-8 bg-opacity-50"
+      class="flex flex-col p-8 text-center bg-gray-700 bg-opacity-50 rounded-b-lg shadow-md"
     >
       <div class="text-left">
-        <p class="text-white font-medium text-xl">{{ course.name }}</p>
+        <p class="text-xl font-medium text-white">{{ course.name }}</p>
         <p class="text-gray-400">{{ course.description }}</p>
       </div>
     </div>
@@ -45,7 +45,7 @@ export default {
       default: 'featured',
       type: String,
     },
-    userId: {
+    userid: {
       type: Number,
       default: -1,
     },
@@ -62,13 +62,13 @@ export default {
     },
   },
   methods: {
-    addCourse(e) {
-      if (this.listtype === 'featured') {
+    async addCourse(e) {
+      if (this.listtype === 'featured' && this.$auth.loggedIn) {
         this.$store.commit('addPersonalCourse', this.course)
-        fetch(
+        await fetch(
           process.env.backendUrl +
             '/users/' +
-            this.userId +
+            this.userid +
             '/courses/' +
             this.course.id,
           {
