@@ -17,6 +17,7 @@
     </div>
     <PersonalCourses
       v-if="this.$store.state.personalCourses.length != 0"
+      :userid="user.id"
     ></PersonalCourses>
   </div>
 </template>
