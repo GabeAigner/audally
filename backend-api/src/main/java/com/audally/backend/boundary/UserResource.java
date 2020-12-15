@@ -8,6 +8,7 @@ import com.audally.backend.control.CourseRepository;
 import com.audally.backend.control.UserRepository;
 import com.audally.backend.entity.Course;
 import com.audally.backend.entity.User;
+import org.jose4j.json.internal.json_simple.JSONObject;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -27,6 +28,7 @@ public class UserResource {
     CourseRepository courseRepository;
     @Inject
     SecurityIdentity identity;
+    private JSONObject businessuser;
 
     @GET
     @NoCache
@@ -47,18 +49,19 @@ public class UserResource {
         return Response.ok(userRepository.findById(uid)).build();
     }
     @GET
-    @Path("/{email}")
+    @Path("email/{email}")
     public Response getUserByEmail(@PathParam("email") String username){
-        User user = (User) userRepository.find("email",username);
+        User user = userRepository.find("email",username).firstResult();
+        System.out.println(user.toString());
         if(user == null){
             return Response
                     .status(Response.Status.NOT_FOUND)
                     .header(username,User.class)
                     .build();
         }
-        User businessuser = new User();
-        businessuser.id = user.id;
-        businessuser.courses = user.courses;
+        businessuser = new JSONObject();
+        businessuser.merge("id",user.id,(o, o2) -> o = o2);
+        businessuser.merge("courses",user.courses,(o, o2) -> o = o2);
 
         return Response.ok(businessuser).build();
     }
