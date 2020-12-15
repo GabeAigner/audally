@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1 class="px-4 text-3xl font-bold text-gray-300">Featured Courses</h1>
+    <h1 class="px-4 mb-8 text-3xl font-bold text-gray-300 sm:mb-0">
+      Featured Courses
+    </h1>
     <ul
       class="grid grid-cols-1 gap-6 sm:p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
     >
