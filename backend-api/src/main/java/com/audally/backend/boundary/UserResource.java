@@ -52,7 +52,6 @@ public class UserResource {
     @Path("email/{email}")
     public Response getUserByEmail(@PathParam("email") String username){
         User user = userRepository.find("email",username).firstResult();
-        System.out.println(user.toString());
         if(user == null){
             return Response
                     .status(Response.Status.NOT_FOUND)
@@ -71,8 +70,7 @@ public class UserResource {
         User user = userRepository.findById(uid);
         if(user == null){
             return Response
-                    .status(Response.Status.NO_CONTENT)
-                    .header("User was not found!",User.class)
+                    .status(202,"Course already exists in the User!")
                     .build();
         }
         return Response.ok(user.courses).build();
@@ -83,16 +81,19 @@ public class UserResource {
             ,@PathParam("CourseId") Long cid){
         User user = userRepository.findById(uid);
         Course course = courseRepository.findById(cid);
+        if(user.courses.contains(course)){
+            return Response
+                    .status(406,"Course already exists in the User!")
+                    .build();
+        }
         if(user == null){
             return Response
-                    .status(Response.Status.NO_CONTENT)
-                    .header("User was not found!",User.class)
+                    .status(202,"User was not found!")
                     .build();
         }
         else if(course == null){
             return Response
-                    .status(Response.Status.NO_CONTENT)
-                    .header("Course was not found!",Course.class)
+                    .status(202,"Course was not found!")
                     .build();
         }
         user.addCourses(course);
@@ -103,10 +104,9 @@ public class UserResource {
     @Path("addUser")
     public Response addUser(User user){
         User entry = new User();
-        if(userRepository.isPersistent(user) == true){
+        if(userRepository.find("email",user.email).count() == 1){
             return Response
-                    .status(Response.Status.FOUND)
-                    .header("User was found",User.class)
+                    .status(406,"User email already exists!")
                     .build();
         }
         entry.copyProperties(user);
@@ -119,8 +119,8 @@ public class UserResource {
     public Response deleteUser(@PathParam("id")Long uid){
         if (userRepository.findById(uid) != null){
             userRepository.deleteById(uid);
-            return Response.status(Response.Status.GONE)
-                    .header("User deleted!",User.class)
+            return Response
+                    .status(410,"User was deleted!")
                     .build();
         }
         return Response.noContent().build();
@@ -133,8 +133,8 @@ public class UserResource {
         if(change != null){
             change.courses.remove(cid);
             userRepository.getEntityManager().merge(change);
-            return Response.status(Response.Status.GONE)
-                    .header("Course removed from User",User.class)
+            return Response
+                    .status(410,"User was deleted!")
                     .build();
         }
         return Response.noContent().build();
@@ -144,11 +144,11 @@ public class UserResource {
     public Response updateUser(@PathParam("id")Long uid,User user){
         User updated = userRepository.findById(uid);
         if (updated != null &&
-                userRepository.isPersistent(user) == false){
+                userRepository.find("email",user.email).count() == 0){
             updated.copyProperties(user);
             userRepository.getEntityManager().merge(updated);
-            return Response.status(Response.Status.FOUND)
-                    .header("User updated!",User.class)
+            return Response
+                    .status(202,"User was updated")
                     .build();
         }
         return Response.noContent().build();
