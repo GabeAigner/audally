@@ -2,9 +2,13 @@
   <li class="bg-center bg-cover rounded-lg">
     <div class="h-24 bg-gray-700 bg-opacity-50 rounded-t-lg">
       <div class="inline-block float-right p-4">
-        <button class="rounded-full focus:outline-none" @click="addCourse">
+        <button
+          v-if="listtype === 'featured'"
+          class="text-gray-400 rounded-full focus:outline-none"
+          @click="addCourse"
+        >
           <svg
-            class="w-10 h-10 text-gray-400 duration-200 hover:text-gray-100"
+            class="w-6 h-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -14,13 +18,27 @@
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
             ></path>
+          </svg>
+        </button>
+        <button
+          v-if="listtype !== 'featured'"
+          class="inline-block text-gray-400 rounded-full focus:outline-none"
+          @click="removeCourse"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
             ></path>
           </svg>
         </button>
@@ -42,7 +60,7 @@
 export default {
   props: {
     listtype: {
-      default: 'featured',
+      default: '',
       type: String,
     },
     userid: {
@@ -61,9 +79,17 @@ export default {
       },
     },
   },
+  computed: {
+    courses() {
+      return this.$store.state.personalCourses
+    },
+  },
   methods: {
     async addCourse(e) {
       if (this.listtype === 'featured' && this.$auth.loggedIn) {
+        if (this.courses.some((c) => c.id === this.course.id)) {
+          return 0
+        }
         this.$store.commit('addPersonalCourse', this.course)
         await fetch(
           process.env.backendUrl +
@@ -73,6 +99,31 @@ export default {
             this.course.id,
           {
             method: 'post',
+          }
+        )
+      }
+    },
+    async removeCourse(e) {
+      console.log('called afsFD')
+      if (this.listtype !== 'featured' && this.$auth.loggedIn) {
+        console.log('init skdfjaskdjf')
+        console.log(this.course)
+        this.$store.commit('removePersonalCourse', this.course)
+        console.log(
+          process.env.backendUrl +
+            '/users/' +
+            this.userid +
+            '/courses/' +
+            this.course.id
+        )
+        await fetch(
+          process.env.backendUrl +
+            '/users/' +
+            this.userid +
+            '/courses/' +
+            this.course.id,
+          {
+            method: 'delete',
           }
         )
       }
