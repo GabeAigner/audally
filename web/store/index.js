@@ -16,4 +16,8 @@ export const mutations = {
   setPersonalCourses(state, courses) {
     state.personalCourses = courses
   },
+  removePersonalCourse(state, course) {
+    const index = state.personalCourses.indexOf((c) => c === course.id)
+    state.personalCourses.splice(index, 1)
+  },
 }
