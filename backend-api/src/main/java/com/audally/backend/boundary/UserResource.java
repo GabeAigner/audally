@@ -130,10 +130,10 @@ public class UserResource {
             ,@PathParam("cid")Long cid){
         User change = userRepository.findById(uid);
         if(change != null){
-            change.courses.remove(cid);
+            change.courses.remove(courseRepository.findById(cid));
             userRepository.getEntityManager().merge(change);
             return Response
-                    .status(410,"User was deleted!")
+                    .status(202,"Course was removed from the user!")
                     .build();
         }
         return Response.noContent().build();
