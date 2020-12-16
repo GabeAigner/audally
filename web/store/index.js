@@ -1,9 +1,13 @@
 export const state = () => ({
+  currentCourse: {},
   courses: [],
   personalCourses: [],
 })
 
 export const mutations = {
+  updateCourse(state, course) {
+    state.currentCourse = course
+  },
   addCourse(state, course) {
     state.courses.push(course)
   },
