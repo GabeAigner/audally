@@ -1,6 +1,6 @@
 <template>
-  <li class="bg-center bg-cover rounded-lg">
-    <div class="h-24 bg-gray-700 bg-opacity-50 rounded-t-lg">
+  <li class="bg-center bg-cover rounded-lg" @click="toDetail">
+    <div class="h-24 bg-gray-700 bg-opacity-50 rounded-t-lg" @click="toDetail">
       <div class="inline-block float-right p-4">
         <button
           v-if="listtype === 'featured'"
@@ -85,6 +85,9 @@ export default {
     },
   },
   methods: {
+    toDetail() {
+      this.$router.push('CourseView')
+    },
     async addCourse(e) {
       if (this.listtype === 'featured' && this.$auth.loggedIn) {
         if (this.courses.some((c) => c.id === this.course.id)) {
@@ -104,18 +107,8 @@ export default {
       }
     },
     async removeCourse(e) {
-      console.log('called afsFD')
       if (this.listtype !== 'featured' && this.$auth.loggedIn) {
-        console.log('init skdfjaskdjf')
-        console.log(this.course)
         this.$store.commit('removePersonalCourse', this.course)
-        console.log(
-          process.env.backendUrl +
-            '/users/' +
-            this.userid +
-            '/courses/' +
-            this.course.id
-        )
         await fetch(
           process.env.backendUrl +
             '/users/' +
