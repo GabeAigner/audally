@@ -1,6 +1,10 @@
 <template>
-  <li class="bg-center bg-cover rounded-lg" @click="toDetail">
-    <div class="h-24 bg-gray-700 bg-opacity-50 rounded-t-lg" @click="toDetail">
+  <li
+    class="bg-center bg-cover rounded-lg"
+    :style="{ 'background-image': `url(${course.pictureUrl})` }"
+    @click="toDetail"
+  >
+    <div class="h-24 bg-gray-800 bg-opacity-50 rounded-t-lg" @click="toDetail">
       <div class="inline-block float-right p-4">
         <button
           v-if="listtype === 'featured'"
@@ -46,11 +50,11 @@
       <!-- Thumbnail image -->
     </div>
     <div
-      class="flex flex-col p-8 text-center bg-gray-700 bg-opacity-50 rounded-b-lg shadow-md"
+      class="flex flex-col p-8 text-center bg-gray-800 bg-opacity-50 rounded-b-lg shadow-md"
     >
       <div class="text-left">
         <p class="text-xl font-medium text-white">{{ course.name }}</p>
-        <p class="text-gray-400">{{ course.description }}</p>
+        <p class="text-gray-200">{{ course.description }}</p>
       </div>
     </div>
   </li>
