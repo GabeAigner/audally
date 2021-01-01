@@ -11,6 +11,7 @@
         :key="course.id"
         :course="course"
         :userid="userid"
+        @removeCourse="removeCourse"
       ></CoursePreview>
     </ul>
   </div>
@@ -27,6 +28,11 @@ export default {
   computed: {
     courses() {
       return this.$store.state.personalCourses
+    },
+  },
+  methods: {
+    removeCourse() {
+      this.$emit('toggleToast')
     },
   },
 }

@@ -12,6 +12,7 @@
         :course="course"
         listtype="featured"
         :userid="userid"
+        @addCourse="addCourse"
       ></CoursePreview>
     </ul>
   </div>
@@ -31,6 +32,11 @@ export default {
         return null
       }
       return this.$store.state.courses
+    },
+  },
+  methods: {
+    addCourse() {
+      this.$emit('toggleToast')
     },
   },
 }
