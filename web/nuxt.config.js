@@ -80,9 +80,9 @@ export default {
       },
     },
     redirect: {
-      login: '/',
-      home: '/',
-      logout: '/',
+      login: false,
+      logout: false,
+      home: false,
     },
   },
 
