@@ -1,10 +1,10 @@
 <template>
   <div>
     <button
-      class="bg-gray-700 shadow-md p-4 rounded-lg text-white hover:shadow-none"
+      class="bg-gray-700 shadow-md px-3 py-2 rounded-lg text-white hover:shadow-none"
       @click="login"
     >
-      Login / Register
+      Login
     </button>
   </div>
 </template>
