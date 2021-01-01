@@ -45,6 +45,7 @@
           <div class="ml-4 flex-shrink-0 flex">
             <button
               class="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              @click="toggleToast"
             >
               <span class="sr-only">Close</span>
               <!-- Heroicon name: x -->
@@ -70,7 +71,13 @@
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    toggleToast() {
+      this.$emit('toggleToast')
+    },
+  },
+}
 </script>
 
 <style></style>
