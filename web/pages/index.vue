@@ -1,9 +1,13 @@
 <template>
   <div class="min-h-screen bg-gray-800">
+    <div v-if="showToast">
+      <Toast @toggleToast="showToast = false"></Toast>
+    </div>
     <ButtonBar></ButtonBar>
     <FeaturedCourses
       v-if="this.$store.state.courses.length != 0"
       :userid="user.id"
+      @toggleToast="showToast = true"
     ></FeaturedCourses>
     <div v-else class="p-4">
       <CoursePreviewSkeleton></CoursePreviewSkeleton>
@@ -18,6 +22,7 @@
     <PersonalCourses
       v-if="this.$store.state.personalCourses.length != 0"
       :userid="user.id"
+      @toggleToast="showToast = true"
     ></PersonalCourses>
   </div>
 </template>
@@ -48,6 +53,7 @@ export default {
   data() {
     return {
       user: {},
+      showToast: false,
     }
   },
   fetchOnServer: false,
