@@ -4,12 +4,12 @@
     :style="{ 'background-image': `url(${course.pictureUrl})` }"
     @click="toDetail"
   >
-    <div class="h-24 bg-gray-800 bg-opacity-50 rounded-t-lg" @click="toDetail">
+    <div class="h-24 bg-gray-800 bg-opacity-50 rounded-t-lg">
       <div class="inline-block float-right p-4">
         <button
-          v-if="listtype === 'featured'"
-          class="text-gray-400 rounded-full focus:outline-none"
-          @click="addCourse"
+          v-if="listtype === 'featured' && this.$auth.loggedIn"
+          class="text-gray-400 rounded-full focus:outline-none hover:text-white"
+          @click.stop="addCourse"
         >
           <svg
             class="w-6 h-6"
@@ -29,7 +29,7 @@
         <button
           v-if="listtype !== 'featured'"
           class="inline-block text-gray-400 rounded-full focus:outline-none"
-          @click="removeCourse"
+          @click.stop="removeCourse"
         >
           <svg
             class="w-6 h-6"
@@ -90,9 +90,17 @@ export default {
   },
   methods: {
     toDetail() {
+      if (this.$auth.loggedIn === null || this.$auth.loggedIn === false) {
+        return
+      }
       this.$router.push('CourseView')
     },
     async addCourse(e) {
+      if (this.$auth.loggedIn === null || this.$auth.loggedIn === false) {
+        return
+      }
+      this.$emit('addCourse')
+
       if (this.listtype === 'featured' && this.$auth.loggedIn) {
         if (this.courses.some((c) => c.id === this.course.id)) {
           return 0
@@ -111,6 +119,7 @@ export default {
       }
     },
     async removeCourse(e) {
+      this.$emit('removeCourse')
       if (this.listtype !== 'featured' && this.$auth.loggedIn) {
         this.$store.commit('removePersonalCourse', this.course)
         await fetch(
