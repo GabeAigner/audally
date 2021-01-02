@@ -1,6 +1,6 @@
 <template>
   <li
-    class="bg-center bg-cover rounded-lg"
+    class="bg-center bg-cover rounded-lg hover:shadow-xl duration-150 ease-in-out"
     :style="{ 'background-image': `url(${course.pictureUrl})` }"
     @click="toDetail"
   >
