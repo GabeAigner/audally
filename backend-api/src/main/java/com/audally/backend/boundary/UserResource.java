@@ -129,7 +129,7 @@ public class UserResource {
     public Response removeCourse(@PathParam("id")Long uid
             ,@PathParam("cid")Long cid){
         User change = userRepository.findById(uid);
-        if(change != null){
+        if(change != null && change.courses.contains(courseRepository.findById(cid)) == true){
             change.courses.remove(courseRepository.findById(cid));
             userRepository.getEntityManager().merge(change);
             return Response
