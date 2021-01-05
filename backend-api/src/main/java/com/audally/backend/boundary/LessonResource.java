@@ -45,7 +45,7 @@ public class LessonResource {
                     */
                     Lesson created = new Lesson();
                     created.copyProperties(l);
-                    created.setCourse(read);
+//                    created.setCourse(read);
                     lessonRepository.persist(created);
                     read.addLessons(lessonRepository.findById(created.id));
                 });
