@@ -28,6 +28,14 @@ public class CourseResource {
 
     @POST
     public Response addCourse(Course course){
+        if(courseRepository.findAll().stream().anyMatch(course1 ->
+                        course1.name.equals(course.name) &&
+                        course1.description.equals(course.description) &&
+                        course1.lessons.equals(course.lessons))){
+            return Response
+                    .status(406,"Course already exists!")
+                    .build();
+        }
         Course entry = new Course();
         entry.copyProperties(course);
         courseRepository.persist(entry);
