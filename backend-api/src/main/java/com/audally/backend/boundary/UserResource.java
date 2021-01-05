@@ -12,9 +12,18 @@ import org.jose4j.json.internal.json_simple.JSONObject;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path("/users")
@@ -28,6 +37,7 @@ public class UserResource {
     CourseRepository courseRepository;
     @Inject
     SecurityIdentity identity;
+    @JsonbTransient
     private JSONObject businessuser;
 
     @GET
@@ -59,8 +69,8 @@ public class UserResource {
         }
         businessuser = new JSONObject();
         businessuser.merge("id",user.id,(o, o2) -> o = o2);
-        businessuser.merge("courses",user.courses,(o, o2) -> o = o2);
-
+        businessuser.merge("courses",user.courses.stream().filter(distinctByKey(course -> course.name))
+                .collect(Collectors.toList()),(o, o2) -> o = o2);
         return Response.ok(businessuser).build();
     }
     @GET
@@ -72,7 +82,10 @@ public class UserResource {
                     .status(202,"Course already exists in the User!")
                     .build();
         }
-        return Response.ok(user.courses).build();
+        businessuser = new JSONObject();
+        businessuser.merge("courses",user.courses.stream().filter(distinctByKey(course -> course.name))
+                .collect(Collectors.toList()),(o, o2) -> o = o2);
+        return Response.ok(businessuser).build();
     }
     @POST
     @Path("{UserId}/courses/{CourseId}")
@@ -100,6 +113,7 @@ public class UserResource {
         return Response.ok(userRepository.findById(uid)).build();
     }
     @POST
+    @Transactional
     @Path("addUser")
     public Response addUser(User user){
         User entry = new User();
@@ -108,6 +122,24 @@ public class UserResource {
                     .status(406,"User email already exists!")
                     .build();
         }
+        /*List<Course> normalCourses = user.courses.stream()
+                .filter(course -> course.id != null)
+                .filter(course -> courseRepository.findById(course.id).equals(course))
+                .collect(Collectors.toList());
+        List<Course> tobeAddedCourses =  user.courses.stream()
+                .filter(course -> course.id == null)
+                .collect(Collectors.toList());
+        user.courses = null;
+
+        normalCourses.stream().distinct().forEach(course -> {
+            user.courses.add(course);
+        });
+        tobeAddedCourses.stream().distinct().forEach(course -> {
+            Course newCourse = new Course();
+            newCourse.copyProperties(course);
+            courseRepository.persist(newCourse);
+            user.courses.add(courseRepository.findById(newCourse.id));
+        });*/
         entry.copyProperties(user);
         userRepository.persist(entry);
         return Response.ok(entry).build();
@@ -151,5 +183,12 @@ public class UserResource {
                     .build();
         }
         return Response.noContent().build();
+    }
+
+    public static <T> Predicate<T> distinctByKey(
+            Function<? super T, ?> keyExtractor) {
+
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 }
