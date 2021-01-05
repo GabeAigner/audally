@@ -35,13 +35,13 @@ public class Lesson implements Serializable {
     public String audioUrl;
     @JsonbDateFormat("HH:mm:ss")
     public LocalTime duration;
-    @ManyToOne
+    /*@ManyToOne
     @JsonbTransient
     @JoinColumn(name = "course_id")
     public Course course;
+    */
     public void copyProperties(Lesson lesson) {
         this.name = lesson.name;
-        this.course = lesson.course;
         this.duration = lesson.duration;
         this.audioUrl = lesson.audioUrl;
         this.description = lesson.description;
@@ -77,12 +77,12 @@ public class Lesson implements Serializable {
     public void setDuration(LocalTime duration) {
         this.duration = duration;
     }
-
+/*
     public Course getCourse() {
         return course;
     }
 
     public void setCourse(Course course) {
         this.course = course;
-    }
+    }*/
 }
