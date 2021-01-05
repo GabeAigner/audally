@@ -34,7 +34,7 @@ public class Course implements Serializable {
     public String description;
     @URL
     public String pictureUrl;
-    @OneToMany(mappedBy = "course",fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     public List<Lesson> lessons = new ArrayList<Lesson>();
 
     public Course(){
