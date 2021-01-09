@@ -93,18 +93,20 @@ export default {
       if (this.$auth.loggedIn === null || this.$auth.loggedIn === false) {
         return
       }
+      this.$store.commit('updateCourse', this.course)
       this.$router.push('CourseView')
     },
     async addCourse(e) {
       if (this.$auth.loggedIn === null || this.$auth.loggedIn === false) {
         return
       }
-      this.$emit('addCourse')
 
       if (this.listtype === 'featured' && this.$auth.loggedIn) {
         if (this.courses.some((c) => c.id === this.course.id)) {
-          return 0
+          console.log('exists')
+          return
         }
+        console.log('goes into it though')
         this.$store.commit('addPersonalCourse', this.course)
         await fetch(
           process.env.backendUrl +
@@ -120,17 +122,21 @@ export default {
     },
     async removeCourse(e) {
       this.$emit('removeCourse')
+      console.log('init remove')
       if (this.listtype !== 'featured' && this.$auth.loggedIn) {
+        console.log('logged')
         this.$store.commit('removePersonalCourse', this.course)
-        await fetch(
-          process.env.backendUrl +
-            '/users/' +
-            this.userid +
-            '/courses/' +
-            this.course.id,
-          {
-            method: 'delete',
-          }
+        console.log(
+          await fetch(
+            process.env.backendUrl +
+              '/users/' +
+              this.userid +
+              '/courses/' +
+              this.course.id,
+            {
+              method: 'delete',
+            }
+          )
         )
       }
     },
