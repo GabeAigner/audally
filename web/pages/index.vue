@@ -1,9 +1,14 @@
 <template>
   <div class="min-h-screen bg-gray-800">
-    <div v-if="showToast">
-      <Toast @toggleToast="showToast = false"></Toast>
-    </div>
-    <ButtonBar></ButtonBar>
+    <Toast
+      class="z-20"
+      :show="showToast"
+      :positive="positiveToast"
+      @toggleToast="showToast = false"
+    ></Toast>
+    <New></New>
+    <button @click="showToast = !showToast">Toggle</button>
+    <button @click="positiveToast = !positiveToast">Toggle</button>
     <FeaturedCourses
       v-if="this.$store.state.courses.length != 0"
       :userid="user.id"
@@ -28,7 +33,17 @@
 </template>
 
 <script>
+/*
+::-webkit-scrollbar {
+  width: 2px;
+}
+html {
+  scrollbar-width: 2px;
+}
+*/
+
 export default {
+  layout: 'next',
   async fetch() {
     await fetch('http://localhost:8080/api/courses')
       .then((response) => response.json())
@@ -46,6 +61,7 @@ export default {
         )
           .then((response) => response.json())
           .then((data) => (this.personalCourses = data))
+        // console.log(this.personalCourses)
         this.$store.commit('setPersonalCourses', this.personalCourses)
       }
     }
@@ -54,10 +70,10 @@ export default {
     return {
       user: {},
       showToast: false,
+      personalCourses: null,
+      positiveToast: null,
     }
   },
   fetchOnServer: false,
 }
 </script>
-
-<style></style>
