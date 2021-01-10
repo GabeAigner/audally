@@ -77,3 +77,81 @@ export default {
   fetchOnServer: false,
 }
 </script>
+
+<style>
+.slider {
+  @apply w-full;
+  text-align: center;
+  overflow: hidden;
+}
+
+.slides {
+  display: flex;
+
+  overflow-x: scroll;
+  scroll-snap-type: x none;
+
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+
+  /*
+  scroll-snap-points-x: repeat(300px);
+  scroll-snap-type: mandatory;
+  */
+}
+
+.slides::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.slides::-webkit-scrollbar-thumb :hover {
+  background: black;
+  border-radius: 10px;
+}
+
+.slides::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.slides > div {
+  scroll-snap-align: center;
+  flex-shrink: 0;
+  width: 300px;
+  height: 300px;
+  margin-right: 50px;
+  border-radius: 10px;
+  background: #eee;
+  transform-origin: center center;
+  transform: scale(1);
+  transition: transform 0.5s;
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
+}
+/* https://www.brunildo.org/test/overscrollback.html
+https://stackoverflow.com/questions/13471910/no-padding-when-using-overflow-auto */
+
+.slides > :last-child::after {
+  content: '';
+  display: block;
+  position: absolute;
+  right: -2rem;
+  width: 5rem;
+  height: 1px;
+}
+.slides > :last-child {
+  scroll-snap-align: end;
+}
+.slide:after {
+  content: '';
+  display: block;
+  position: absolute;
+  right: -2rem;
+  width: 5rem;
+  height: 1px;
+}
+</style>
