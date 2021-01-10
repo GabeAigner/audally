@@ -1,12 +1,12 @@
 <template>
   <div class="min-h-screen bg-gray-800">
+    <PageHeader name="Home"></PageHeader>
     <Toast
       class="z-20"
       :show="showToast"
       :positive="positiveToast"
       @toggleToast="showToast = false"
     ></Toast>
-    <New></New>
     <button @click="showToast = !showToast">Toggle</button>
     <button @click="positiveToast = !positiveToast">Toggle</button>
     <FeaturedCourses
