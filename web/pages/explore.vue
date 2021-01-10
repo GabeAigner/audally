@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div>
+    <PageHeader name="Explore"></PageHeader>
+  </div>
 </template>
 
 <script>

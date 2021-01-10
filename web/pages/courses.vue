@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div>
+    <PageHeader name="My Courses"></PageHeader>
+  </div>
 </template>
 
 <script>
