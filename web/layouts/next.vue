@@ -185,32 +185,10 @@
             <!-- User account dropdown -->
             <div class="relative inline-block px-2 mt-6 text-left">
               <!-- Login / Register Button -->
-              <button
-                v-if="!logged"
-                type="button"
-                class="inline-flex items-center justify-center w-full px-6 py-3 text-base font-medium text-gray-200 bg-purple-700 border border-transparent rounded-md shadow-sm hover:bg-purple-800 focus:outline-none"
-                @click="logged = !logged"
-              >
-                Login / Register
-                <!-- Heroicon name: mail -->
-                <svg
-                  class="w-5 h-5 ml-3 -mr-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                  ></path>
-                </svg>
-              </button>
+              <LoginButton v-if="!$auth.loggedIn"></LoginButton>
               <!-- Dropdown menu toggle, controlling the show/hide state of dropdown menu. -->
               <button
-                v-if="logged"
+                v-else
                 id="options-menu"
                 type="button"
                 class="w-full px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-md group hover:shadow-inner focus:shadown-outline hover:bg-opacity-100 focus:bg-gray-700"
@@ -309,12 +287,13 @@
                     >
                   </div>
                   <div class="py-1">
-                    <a
+                    <button
                       href="#"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                      >Logout</a
                     >
+                      Logout
+                    </button>
                   </div>
                 </div>
               </transition>
