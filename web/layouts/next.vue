@@ -287,13 +287,7 @@
                     >
                   </div>
                   <div class="py-1">
-                    <button
-                      href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                    >
-                      Logout
-                    </button>
+                    <LogoutButton></LogoutButton>
                   </div>
                 </div>
               </transition>
@@ -336,7 +330,7 @@
                     ? 'text-white bg-gray-900'
                     : ' text-gray-300 hover:bg-gray-700 hover:text-white focus:bg-gray-900'
                 "
-                to="/explore"
+                to="explore"
                 class="flex items-center px-2 py-2 text-sm font-medium rounded-md group"
               >
                 <!-- Heroicon name: search -->
@@ -526,12 +520,7 @@
                     >
                   </div>
                   <div class="py-1" role="none">
-                    <a
-                      href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                      >Logout</a
-                    >
+                    <LogoutButton></LogoutButton>
                   </div>
                 </div>
               </transition>
