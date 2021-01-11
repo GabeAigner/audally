@@ -1,9 +1,13 @@
 <template>
-  <div class="bg-gray-800 min-h-screen"></div>
+  <div></div>
 </template>
 
 <script>
-export default {}
+export default {
+  created() {
+    this.$router.push('/')
+  },
+}
 </script>
 
 <style></style>
