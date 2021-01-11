@@ -1,9 +1,12 @@
 <template>
-  <div class="">
-    <button class="bg-gray-400 px-3 py-2 rounded-lg" @click="logout">
-      Logout
-    </button>
-  </div>
+  <button
+    href="#"
+    class="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+    role="menuitem"
+    @click="logout"
+  >
+    Logout
+  </button>
 </template>
 
 <script>
