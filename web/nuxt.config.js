@@ -82,7 +82,7 @@ export default {
     redirect: {
       login: false,
       logout: '/',
-      home: '/',
+      home: false,
     },
   },
 
@@ -93,8 +93,8 @@ export default {
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
 
-  server: {
+  /* server: {
     host: '192.168.1.47', // get it from here hostname -I | awk '{print $1}'
     port: 3000, // default: 3000
-  },
+  }, */
 }
