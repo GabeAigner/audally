@@ -1,6 +1,6 @@
 <template>
   <div
-    class="px-4 py-6 border-b-2 border-gray-700 shadow lg:px-8 md:flex md:items-center md:justify-between"
+    class="px-4 py-6 border-b border-gray-700 shadow lg:px-8 md:flex md:items-center md:justify-between"
   >
     <h2 class="text-3xl font-bold leading-7 text-white sm:truncate">
       {{ name }}
