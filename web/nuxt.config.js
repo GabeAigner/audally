@@ -80,9 +80,9 @@ export default {
       },
     },
     redirect: {
-      login: false,
+      login: '/',
       logout: '/',
-      home: false,
+      home: false, // if not false, redirects like the menu items won't work
     },
   },
 
