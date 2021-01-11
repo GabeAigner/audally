@@ -80,7 +80,12 @@
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                 <nuxt-link
                   to="/"
-                  class="flex items-center px-2 py-2 text-base font-medium text-white bg-gray-900 rounded-md group"
+                  :class="
+                    $route.path === '/'
+                      ? 'text-white bg-gray-900'
+                      : ' text-gray-300 hover:bg-gray-700 hover:text-white focus:bg-gray-900'
+                  "
+                  class="flex items-center px-2 py-2 text-base font-medium rounded-md group"
                   @click.native="closeMobileMenu()"
                 >
                   <!-- Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300" -->
@@ -105,7 +110,12 @@
 
                 <nuxt-link
                   to="/explore"
-                  class="flex items-center px-2 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white group"
+                  :class="
+                    $route.path === '/explore'
+                      ? 'text-white bg-gray-900'
+                      : ' text-gray-300 hover:bg-gray-700 hover:text-white focus:bg-gray-900'
+                  "
+                  class="flex items-center px-2 py-2 text-base font-medium rounded-md group"
                   @click.native="closeMobileMenu()"
                 >
                   <!-- Heroicon name: search -->
@@ -128,7 +138,12 @@
 
                 <nuxt-link
                   to="/courses"
-                  class="flex items-center px-2 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white group"
+                  :class="
+                    $route.path === '/courses'
+                      ? 'text-white bg-gray-900'
+                      : ' text-gray-300 hover:bg-gray-700 hover:text-white focus:bg-gray-900'
+                  "
+                  class="flex items-center px-2 py-2 text-base font-medium rounded-md group"
                   @click.native="closeMobileMenu()"
                 >
                   <!-- Heroicon name: bookmark-alt -->
@@ -169,6 +184,7 @@
             </div>
             <!-- User account dropdown -->
             <div class="relative inline-block px-2 mt-6 text-left">
+              <!-- Login / Register Button -->
               <button
                 v-if="!logged"
                 type="button"
@@ -197,7 +213,7 @@
                 v-if="logged"
                 id="options-menu"
                 type="button"
-                class="w-full px-3 py-2 text-sm font-medium text-white bg-gray-900 bg-opacity-50 rounded-md group hover:shadow-inner focus:shadown-outline hover:bg-gray-700"
+                class="w-full px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-md group hover:shadow-inner focus:shadown-outline hover:bg-opacity-100 focus:bg-gray-700"
                 aria-haspopup="true"
                 aria-expanded="true"
                 @click="showProfileDropdown = !showProfileDropdown"
@@ -308,7 +324,12 @@
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
               <nuxt-link
                 to="/"
-                class="flex items-center px-2 py-2 text-sm font-medium text-white bg-gray-900 rounded-md group"
+                class="flex items-center px-2 py-2 text-sm font-medium rounded-md group"
+                :class="
+                  $route.path === '/'
+                    ? 'text-white bg-gray-900'
+                    : ' text-gray-300 hover:bg-gray-700 hover:text-white focus:bg-gray-900'
+                "
               >
                 <!-- Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300" -->
                 <!-- Heroicon name: home -->
@@ -331,8 +352,13 @@
               </nuxt-link>
 
               <nuxt-link
+                :class="
+                  $route.path === '/explore'
+                    ? 'text-white bg-gray-900'
+                    : ' text-gray-300 hover:bg-gray-700 hover:text-white focus:bg-gray-900'
+                "
                 to="/explore"
-                class="flex items-center px-2 py-2 text-sm font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white group"
+                class="flex items-center px-2 py-2 text-sm font-medium rounded-md group"
               >
                 <!-- Heroicon name: search -->
                 <svg
@@ -353,8 +379,13 @@
               </nuxt-link>
 
               <nuxt-link
+                :class="
+                  $route.path === '/courses'
+                    ? 'text-white bg-gray-900'
+                    : ' text-gray-300 hover:bg-gray-700 hover:text-white focus:bg-gray-900'
+                "
+                class="flex items-center px-2 py-2 text-sm rounded-md font-mediu group"
                 to="/courses"
-                class="flex items-center px-2 py-2 text-sm font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white group"
               >
                 <!-- Heroicon name: bookmark-alt -->
                 <svg
@@ -379,7 +410,7 @@
       </div>
     </div>
     <div class="flex flex-col flex-1 w-0 overflow-hidden">
-      <!-- Search header -->
+      <!-- Mobile Header -->
       <div
         class="relative z-10 flex flex-shrink-0 h-16 border-b border-gray-700 lg:hidden"
       >
