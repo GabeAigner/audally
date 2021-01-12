@@ -56,6 +56,8 @@ public class UserResource {
     @GET
     @Path("/{UserId}")
     public Response getUser(@PathParam("UserId") Long uid){
+        var user = userRepository.findById(uid);
+        doLoader(user);
         return Response.ok(userRepository.findById(uid)).build();
     }
     @GET
@@ -68,8 +70,8 @@ public class UserResource {
                     .build();
         }
         businessuser = new JSONObject();
-        businessuser.merge("id",user.id,(o, o2) -> o = o2);
-        businessuser.merge("id",user.userName,(o, o2) -> o = o2);
+        businessuser.merge("id",user.getId(),(o, o2) -> o = o2);
+        businessuser.merge("username",user.getUserName(),(o, o2) -> o = o2);
         return Response.ok(businessuser).build();
     }
     @GET
@@ -81,10 +83,12 @@ public class UserResource {
                     .status(202,"Course already exists in the User!")
                     .build();
         }
+        /*
         businessuser = new JSONObject();
-        businessuser.merge("courses",user.courses.stream().filter(distinctByKey(course -> course.name))
-                .collect(Collectors.toList()),(o, o2) -> o = o2);
-        return Response.ok(businessuser.get("courses")).build();
+        businessuser.merge("courses",user.getCourses().stream().filter(distinctByKey(course -> course.getName()))
+                .collect(Collectors.toList()),(o, o2) -> o = o2);*/
+        doLoader(user);
+        return Response.ok(user.getCourses()).build();
     }
     @POST
     @Path("{UserId}/courses/{CourseId}")
@@ -92,7 +96,8 @@ public class UserResource {
             ,@PathParam("CourseId") Long cid){
         User user = userRepository.findById(uid);
         Course course = courseRepository.findById(cid);
-        if(user.courses.contains(course)){
+        course.getLessons();
+        if(user.getCourses().contains(course)){
             return Response
                     .status(406,"Course already exists in the User!")
                     .build();
@@ -102,21 +107,23 @@ public class UserResource {
                     .status(204,"User was not found!")
                     .build();
         }
+
         else if(course == null){
             return Response
                     .status(204,"Course was not found!")
                     .build();
         }
-        user.addCourses(course);
-        userRepository.getEntityManager().merge(user);
-        return Response.ok(userRepository.findById(uid)).build();
+        user.getCourses().add(course);
+        userRepository.persist(user);
+        user.getSubscriptions();
+        return Response.ok(user).build();
     }
     @POST
     @Transactional
     @Path("addUser")
     public Response addUser(User user){
         User entry = new User();
-        if(userRepository.find("email",user.email).count() == 1){
+        if(userRepository.find("email",user.getEmail()).count() == 1){
             return Response
                     .status(406,"User email already exists!")
                     .build();
@@ -160,8 +167,8 @@ public class UserResource {
     public Response removeCourse(@PathParam("id")Long uid
             ,@PathParam("cid")Long cid){
         User change = userRepository.findById(uid);
-        if(change != null && change.courses.contains(courseRepository.findById(cid)) == true){
-            change.courses.remove(courseRepository.findById(cid));
+        if(change != null && change.getCourses().contains(courseRepository.findById(cid)) == true){
+            change.getCourses().remove(courseRepository.findById(cid));
             userRepository.getEntityManager().merge(change);
             return Response
                     .status(202,"Course was removed from the user!")
@@ -174,7 +181,7 @@ public class UserResource {
     public Response updateUser(@PathParam("id")Long uid,User user){
         User updated = userRepository.findById(uid);
         if (updated != null &&
-                userRepository.find("email",user.email).count() == 0){
+                userRepository.find("email",user.getEmail()).count() == 0){
             updated.copyProperties(user);
             userRepository.getEntityManager().merge(updated);
             return Response
@@ -189,5 +196,10 @@ public class UserResource {
 
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+    public void doLoader(User user){
+        List<Course> load = user.getCourses();
+        load.forEach(course -> course.getLessons());
+        user.getSubscriptions();
     }
 }
