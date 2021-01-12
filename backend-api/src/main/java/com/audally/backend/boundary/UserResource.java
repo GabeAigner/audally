@@ -69,8 +69,7 @@ public class UserResource {
         }
         businessuser = new JSONObject();
         businessuser.merge("id",user.id,(o, o2) -> o = o2);
-        businessuser.merge("courses",user.courses.stream().filter(distinctByKey(course -> course.name))
-                .collect(Collectors.toList()),(o, o2) -> o = o2);
+        businessuser.merge("id",user.userName,(o, o2) -> o = o2);
         return Response.ok(businessuser).build();
     }
     @GET
@@ -85,7 +84,7 @@ public class UserResource {
         businessuser = new JSONObject();
         businessuser.merge("courses",user.courses.stream().filter(distinctByKey(course -> course.name))
                 .collect(Collectors.toList()),(o, o2) -> o = o2);
-        return Response.ok(businessuser).build();
+        return Response.ok(businessuser.get("courses")).build();
     }
     @POST
     @Path("{UserId}/courses/{CourseId}")
