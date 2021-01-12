@@ -23,21 +23,22 @@ public class CourseResource {
 
     @GET
     public List<Course> getAll(){
-        return courseRepository.findAll().list();
+        return doLoader(courseRepository.findAll().list());
     }
 
     @POST
     public Response addCourse(Course course){
         if(courseRepository.findAll().stream().anyMatch(course1 ->
-                        course1.name.equals(course.name) &&
-                        course1.description.equals(course.description) &&
-                        course1.lessons.equals(course.lessons))){
+                        course1.getName().equals(course.getName()) &&
+                        course1.getDescription().equals(course.getDescription()) &&
+                        course1.getLessons().equals(course.getLessons()))){
             return Response
                     .status(406,"Course already exists!")
                     .build();
         }
         Course entry = new Course();
         entry.copyProperties(course);
+        course.getLessons();
         courseRepository.persist(entry);
         return Response.ok(entry).build();
     }
@@ -56,8 +57,14 @@ public class CourseResource {
         Course change = courseRepository.findById(cid);
         if(change != null){
             change.copyProperties(course);
-            courseRepository.getEntityManager().merge(change);
+            change.getLessons();
+            courseRepository.persist(change);
+            return Response.ok(change).build();
         }
         return Response.noContent().build();
+    }
+    public List<Course> doLoader(List<Course> courses){
+        courses.forEach(course -> course.getLessons());
+        return courses;
     }
 }
