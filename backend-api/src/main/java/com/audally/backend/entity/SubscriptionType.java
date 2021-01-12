@@ -1,10 +1,16 @@
 package com.audally.backend.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "subscription_types", schema = "audally")
 public class SubscriptionType implements Serializable {
@@ -19,5 +25,5 @@ public class SubscriptionType implements Serializable {
             strategy = GenerationType.IDENTITY
             ,generator = "subTypeSequence")
     private Long id;
-    public String name;
+    private String name;
 }

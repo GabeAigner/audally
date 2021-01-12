@@ -1,11 +1,19 @@
 package com.audally.backend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 
+import javax.json.bind.annotation.JsonbProperty;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.transaction.Transactional;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.persistence.*;
@@ -14,6 +22,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "courses",schema = "audally")
 public class Course implements Serializable {
@@ -27,30 +38,29 @@ public class Course implements Serializable {
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
             ,generator = "courseSequence")
-    public Long id;
+    private Long id;
     @NotNull
-    public String name;
+    private String name;
     @Size(max = 400)
-    public String description;
+    private String description;
     @URL
-    public String pictureUrl;
-    @OneToMany(fetch = FetchType.EAGER)
-    public List<Lesson> lessons = new ArrayList<Lesson>();
+    private String pictureUrl;
+    //    @JsonbTransient - die lessons werden überhaupt nicht angezeigt
+    /*@JsonbProperty
+    @JsonSerialize*/
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<Lesson> lessons = new ArrayList<Lesson>();
 
-    public Course(){
+    /*@JsonSerialize
+    @JsonbProperty*/
+    public List<Lesson> getLessons() {
+        return lessons;
+    }
 
-    }
-    public void addLessons(Lesson lesson){
-        this.lessons.add(lesson);
-    }
-    public List<Lesson> getLessons(){
-        return this.lessons;
-    }
     public void copyProperties(Course course) {
-        this.name = course.name;
-        this.lessons = course.lessons;
-        this.description = course.description;
-        this.pictureUrl = course.pictureUrl;
+        this.name = course.getName();
+        this.lessons = course.getLessons();
+        this.description = course.getDescription();
+        this.pictureUrl = course.getPictureUrl();
     }
-
 }

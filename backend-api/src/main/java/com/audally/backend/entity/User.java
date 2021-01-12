@@ -1,10 +1,16 @@
 package com.audally.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.jboss.resteasy.spi.touri.MappedBy;
 
 import javax.annotation.processing.Generated;
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -13,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "users",schema = "audally")
 public class User implements Serializable {
@@ -26,79 +35,36 @@ public class User implements Serializable {
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
             ,generator = "userSequence")
-    public Long id;
+    private Long id;
     @NotNull
     @NotEmpty(message = "Not allowed to be empty!")
-    public String userName;
+    private String userName;
     @NotNull
     @Email
-    public String email;
+    private String email;
     @NotNull
     @NotEmpty
-    public String password;
+    private String password;
     /*
     @NotNull
     public Date joinDate;
     */
-    @OneToMany(mappedBy = "user")
-    public List<Subscription> subscriptions = new ArrayList<Subscription>();
-    @ManyToMany(fetch = FetchType.EAGER)
-    public List<Course> courses = new ArrayList<Course>();
-    public User(){ }
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Subscription> subscriptions = new ArrayList<Subscription>();
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<Course> courses = new ArrayList<Course>();
 
-    public void copyProperties(User user) {
-        this.email = user.email;
-        this.subscriptions = user.subscriptions;
-        this.courses = user.courses;
-        this.userName = user.userName;
-        this.password = user.password;
-    }
-
-    public void addCourses(Course courses) {
-        this.courses.add(courses);
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
+    @JsonSerialize
+    @JsonIgnore
     public List<Course> getCourses() {
         return courses;
     }
 
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", subscriptions=" + subscriptions.toArray().toString() +
-                ", courses=" + courses.toArray().toString() +
-                '}';
+    public void copyProperties(User user) {
+        setEmail(user.getEmail());
+        this.subscriptions = user.getSubscriptions();
+        this.courses = user.getCourses();
+        this.userName = user.getUserName();
+        this.password = user.getPassword();
     }
 }
