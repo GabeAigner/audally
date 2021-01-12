@@ -10,7 +10,10 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -29,7 +32,8 @@ public class LessonResource {
     public Response getLessonsOfCourse(@PathParam("id") Long cid){
         Course read = courseRepository.findById(cid);
         if(read == null)return Response.noContent().build();
-        return Response.ok(read.lessons).build();
+        return Response.ok(read.getLessons()).build();
+
     }
     @POST
     @Path("addLessonsToCourse/{cid}")
@@ -47,9 +51,9 @@ public class LessonResource {
                     created.copyProperties(l);
 //                    created.setCourse(read);
                     lessonRepository.persist(created);
-                    read.addLessons(lessonRepository.findById(created.id));
+                    read.getLessons().add(lessonRepository.findById(created.getId()));
                 });
-        courseRepository.getEntityManager().merge(read);
+        courseRepository.persist(read);
         return Response.ok(courseRepository.findById(cid)).build();
     }
     @DELETE
@@ -64,15 +68,21 @@ public class LessonResource {
                             .anyMatch(lesson -> lesson.equals(l))){
                     }
                 });*/
-
-        change.lessons.stream()
+        AtomicBoolean toDelete = new AtomicBoolean(false);
+        List<Lesson> ToDeleteLessons = new ArrayList<>();
+        change.getLessons().stream()
                 .forEach(l -> {
-                    if(Arrays.stream(lessons).anyMatch(nl -> nl.equals(l)) == true){
+                    if(Arrays.stream(lessons).anyMatch(nl -> nl.getId().equals(l.getId())) == true){
+                        toDelete.set(true);
+                        ToDeleteLessons.add(l);
                         lessonRepository.delete(l);
-                        change.lessons.remove(l);
                     }
                 });
-        courseRepository.getEntityManager().merge(change);
-        return Response.ok(change.lessons).build();
+        if(toDelete.get()) ToDeleteLessons.forEach(lesson -> change.getLessons().remove(lesson));
+        else return Response
+                .status(204,"Lessons were not found!")
+                .build();
+        courseRepository.persist(change);
+        return Response.ok(change.getLessons()).build();
     }
 }
