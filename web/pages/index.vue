@@ -7,28 +7,28 @@
       :positive="positiveToast"
       @toggleToast="showToast = false"
     ></Toast>
-    <button @click="showToast = !showToast">Toggle</button>
-    <button @click="positiveToast = !positiveToast">Toggle</button>
-    <FeaturedCourses
-      v-if="this.$store.state.courses.length != 0"
-      :userid="user.id"
-      @toggleToast="showToast = true"
-    ></FeaturedCourses>
-    <div v-else class="p-4">
-      <CoursePreviewSkeleton></CoursePreviewSkeleton>
-      <!--<li
+    <div class="mt-4 lg:px-4">
+      <FeaturedCourses
+        v-if="this.$store.state.courses.length != 0"
+        :userid="user.id"
+        @toggleToast="toggleToast(true)"
+      ></FeaturedCourses>
+      <div v-else class="p-4">
+        <CoursePreviewSkeleton></CoursePreviewSkeleton>
+        <!--<li
         class="flex flex-col p-8 text-center bg-gray-700 rounded-lg shadow-md"
       >
         <div class="text-left">
           <p class="text-gray-400">Searching for courses...</p>
         </div>
       </li>-->
+      </div>
+      <PersonalCourses
+        v-if="this.$store.state.personalCourses.length != 0"
+        :userid="user.id"
+        @toggleToast="toggleToast(false)"
+      ></PersonalCourses>
     </div>
-    <PersonalCourses
-      v-if="this.$store.state.personalCourses.length != 0"
-      :userid="user.id"
-      @toggleToast="showToast = true"
-    ></PersonalCourses>
   </div>
 </template>
 
@@ -51,8 +51,8 @@ export default {
     this.$store.commit('setCourses', this.courses)
     if (this.$auth.loggedIn) {
       await fetch(
-        'http://localhost:8080/api/users/email/' + this.$auth.user.email
-      ) //  + this.$auth.user.email
+        'http://localhost:8080/api/users/email/' + this.$auth.user.email // !: I also get a completely wrong User object!
+      ) //  + this.$auth.user.email                                 // ?: Please test eh endpoints next time first!! :D
         .then((response) => response.json())
         .then((data) => (this.user = data))
       if (this.user !== undefined) {
@@ -60,9 +60,17 @@ export default {
           'http://localhost:8080/api/users/' + this.user.id + '/courses'
         )
           .then((response) => response.json())
-          .then((data) => (this.personalCourses = data))
-        // console.log(this.personalCourses)
-        this.$store.commit('setPersonalCourses', this.personalCourses)
+          .then((data) => {
+            this.personalCourses = data // !: I get a double nested courses array from the backend. Please fix
+            this.personalCourses = this.personalCourses.courses
+          })
+
+        if (
+          this.personalCourses.length > 0 ||
+          this.personalCourses.length !== undefined
+        ) {
+          this.$store.commit('setPersonalCourses', this.personalCourses)
+        }
       }
     }
   },
@@ -73,6 +81,18 @@ export default {
       personalCourses: null,
       positiveToast: null,
     }
+  },
+  methods: {
+    toggleToast(posOrNot) {
+      this.positiveToast = posOrNot
+      this.showToast = true
+      /* this cant be used in setTimeout so I need to preserve the value of this in that
+      I found the solution here: https://stackoverflow.com/a/14571933/12722918 */
+      const that = this
+      setTimeout(function () {
+        that.showToast = false
+      }, 4000)
+    },
   },
   fetchOnServer: false,
 }

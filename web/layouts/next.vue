@@ -206,8 +206,9 @@
                       alt=""
                     />
                     <span class="flex-1 min-w-0">
-                      <span class="text-sm font-medium text-gray-200 truncate"
-                        >Jessy Schwarz</span
+                      <span
+                        class="text-sm font-medium text-gray-200 truncate"
+                        >{{ this.$auth.user.name }}</span
                       >
                     </span>
                   </span>
