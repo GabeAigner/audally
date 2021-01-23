@@ -37,7 +37,7 @@ Content-Type: application/json
 ]
 
 ###
-POST http://localhost:8080/api/users/3/lessons/2
+POST http://localhost:8080/api/users/3/lessons/2/progresses
 Content-Type: application/json
 
 {
