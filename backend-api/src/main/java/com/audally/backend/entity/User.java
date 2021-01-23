@@ -53,7 +53,8 @@ public class User implements Serializable {
     private List<Subscription> subscriptions = new ArrayList<Subscription>();
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Course> courses = new ArrayList<Course>();
-
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<Progress> progresses = new ArrayList<>();
     @JsonSerialize
     @JsonIgnore
     public List<Course> getCourses() {
@@ -66,5 +67,6 @@ public class User implements Serializable {
         this.courses = user.getCourses();
         this.userName = user.getUserName();
         this.password = user.getPassword();
+        this.progresses = user.getProgresses();
     }
 }
