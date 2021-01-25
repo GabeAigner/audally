@@ -29,6 +29,23 @@
         @toggleToast="toggleToast(false)"
       ></PersonalCourses>
     </div>
+    <!-- Bottom Bar for Audio Player -->
+    <div
+      class="fixed bottom-0 right-0 flex p-2 border-t-2 border-gray-700 left-64"
+    >
+      <div
+        class="flex flex-col justify-center w-1/4 px-4 py-2 font-medium text-center text-white truncate ... hover:text-gray-300"
+      >
+        Hello my name is lesson from Gabriel Aigner and Sandro Tadic
+      </div>
+      <div class="w-3/4">
+        <vue-plyr class="relative">
+          <audio controls crossorigin playsinline preload="auto">
+            <source id="plyr" :src="current" type="audio/mp3" />
+          </audio>
+        </vue-plyr>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -62,7 +79,7 @@ export default {
           .then((response) => response.json())
           .then((data) => {
             this.personalCourses = data // !: I get a double nested courses array from the backend. Please fix
-            this.personalCourses = this.personalCourses.courses
+            // this.personalCourses = this.personalCourses.courses
           })
 
         if (
@@ -99,6 +116,15 @@ export default {
 </script>
 
 <style>
+body {
+  --plyr-color-main: #6b46c1;
+  --plyr-audio-controls-background: #2d3748;
+  --plyr-audio-control-color: white;
+}
+
+.left-64 {
+  left: 16rem;
+}
 .slider {
   @apply w-full;
   text-align: center;
