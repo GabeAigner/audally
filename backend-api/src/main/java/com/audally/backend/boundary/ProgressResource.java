@@ -13,6 +13,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import java.time.Duration;
+
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path("/progresses")
@@ -33,10 +35,17 @@ public class ProgressResource {
                     .build();
         }
         Lesson l = found.getLesson();
-        if(!progress.isAlreadyListened() && progress.getDuration().isAfter(l.getDuration().minusSeconds(30))) {
+        String[] parts = l.getDuration().toString().split(":");
+        Duration duration = Duration
+                .ofHours(Long.parseLong(parts[0]))
+                .plusMinutes(Long.parseLong(parts[1]))
+                .plusSeconds(Long.parseLong(parts[2]));
+        if(!progress.isAlreadyListened()
+                && progress.getProgressInSeconds()
+                > (duration.getSeconds()-30)) {
             progress.setAlreadyListened(true);
         }
-        if(progress.isAlreadyListened()){
+        if(found.isAlreadyListened()){
             found.copyProperties(progress);
             found.setAlreadyListened(true);
         }else found.copyProperties(progress);

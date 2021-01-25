@@ -19,13 +19,15 @@ import javax.json.bind.annotation.JsonbTransient;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.time.LocalTime;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -62,8 +64,13 @@ public class UserResource {
     @Path("/{UserId}")
     public Response getUser(@PathParam("UserId") Long uid){
         var user = userRepository.findById(uid);
+        if(user == null){
+            return Response
+                    .status(204,"User could not be found or doesn't exist!")
+                    .build();
+        }
         doLoader(user);
-        return Response.ok(userRepository.findById(uid)).build();
+        return Response.ok(user).build();
     }
     @GET
     @Path("email/{email}")
@@ -106,6 +113,34 @@ public class UserResource {
         }
         doLoader(user);
         return Response.ok(user.getProgresses()).build();
+    }
+    @GET
+    @Path("/{UserId}/courses/{CourseId}/progresses")
+    public Response getProgressesOfCourse(@PathParam("UserId") Long uid, @PathParam("CourseId") Long cid){
+        User user = userRepository.findById(uid);
+        if(user == null){
+            return Response
+                    .status(202,"User does not exist")
+                    .build();
+        }
+        doLoader(user);
+        return Response.ok(user.getProgresses()
+                .stream().filter(progress -> {
+                    AtomicBoolean check = new AtomicBoolean(false);
+                    user.getCourses().stream()
+                            .filter(course -> course.getId().equals(cid))
+                            .map(course -> course.getLessons())
+                            .forEach(lessonList -> {
+                                Optional<Lesson> l = lessonList.stream()
+                                    .filter(lesson -> lesson.getId().equals(progress.getId()))
+                                    .findFirst();
+                                if(l.isPresent()){
+                                    check.set(true);
+                                }
+                            });
+                    return check.get();
+                }).collect(Collectors.toList()))
+        .build();
     }
     @GET
     @Path("/{UserId}/lessons/{LessonId}/progresses")
@@ -155,7 +190,13 @@ public class UserResource {
                             .findFirst();
                     if(l.isPresent()){
                         Progress insertProgress = new Progress();
-                        if(!progress.isAlreadyListened() && progress.getDuration().isAfter(l.get().getDuration().minusSeconds(30))){
+                        String[] parts = l.get().getDuration().toString().split(":");
+                        Duration duration = Duration
+                                .ofHours(Long.parseLong(parts[0]))
+                                .plusMinutes(Long.parseLong(parts[1]))
+                                .plusSeconds(Long.parseLong(parts[2]));
+                        if(!progress.isAlreadyListened() &&
+                                progress.getProgressInSeconds() > (duration.getSeconds() - 30)){
                             progress.setAlreadyListened(true);
                         }
                         insertProgress.copyProperties(progress);
@@ -164,6 +205,7 @@ public class UserResource {
                         user.getProgresses().add(insertProgress);
                     }
                 });
+
         userRepository.persist(user);
         return Response.ok(user.getProgresses()).build();
     }
@@ -174,6 +216,7 @@ public class UserResource {
         User user = userRepository.findById(uid);
         Course course = courseRepository.findById(cid);
         course.getLessons();
+        doLoader(user);
         if(user.getCourses().contains(course)){
             return Response
                     .status(406,"Course already exists in the User!")
@@ -192,8 +235,6 @@ public class UserResource {
         }
         user.getCourses().add(course);
         userRepository.persist(user);
-        user.getSubscriptions();
-        user.getProgresses();
         return Response.ok(user).build();
     }
     @POST
