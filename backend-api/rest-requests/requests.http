@@ -21,10 +21,10 @@ Content-Type: application/json
 GET http://localhost:8080/api/users/2/courses
 
 ### Add Course to User
-POST http://localhost:8080/api/users/2/courses/2
+POST http://localhost:8080/api/users/3/courses/2
 Content-Type: application/json
 ###
-POST http://localhost:8080/api/lessons/addLessonsToCourse/4
+POST http://localhost:8080/api/lessons/addLessonsToCourse/2
 Content-Type: application/json
 
 [
@@ -37,21 +37,23 @@ Content-Type: application/json
 ]
 
 ###
-POST http://localhost:8080/api/users/3/lessons/2/progresses
+POST http://localhost:8080/api/users/3/lessons/3/progresses
 Content-Type: application/json
 
 {
-  "duration": "00:12:44",
+  "progressInSeconds": 750,
   "alreadyListened": false
 }
 ###
-PUT http://localhost:8080/api/progresses/2
+PUT http://localhost:8080/api/progresses/1
 Content-Type: application/json
 
 {
-  "duration": "00:07:44",
+  "progressInSeconds": 200,
   "alreadyListened": false
 }
+### Get User Progresses by the Courses
+GET http://localhost:8080/api/users/3/courses/2/progresses
 
 #### User Requests
 
