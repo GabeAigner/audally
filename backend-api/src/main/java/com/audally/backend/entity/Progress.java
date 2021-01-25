@@ -1,6 +1,6 @@
 package com.audally.backend.entity;
 
-import jdk.jfr.Percentage;
+import jdk.jfr.Timespan;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,9 +8,8 @@ import lombok.Setter;
 import javax.json.bind.annotation.JsonbDateFormat;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalTime;
-import java.util.Dictionary;
-import java.util.Enumeration;
 
 @Entity
 @Getter
@@ -30,14 +29,11 @@ public class Progress implements Serializable {
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Lesson lesson;
-
     private boolean alreadyListened;
-    @JsonbDateFormat("HH:mm:ss")
-    private LocalTime duration;
+    private int progressInSeconds;
+
     public void copyProperties(Progress progress) {
-        this.lesson = progress.getLesson();
-        this.duration = progress.getDuration();
+        this.progressInSeconds = progress.getProgressInSeconds();
         this.alreadyListened = progress.isAlreadyListened();
     }
-
 }
