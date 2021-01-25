@@ -23,7 +23,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: [{ src: '~/plugins/vue-plyr', mode: 'client' }],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -91,7 +91,11 @@ export default {
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {},
+  build: {
+    cache: true,
+    hardSource: true,
+    parallel: true,
+  },
 
   /* server: {
     host: '192.168.1.47', // get it from here hostname -I | awk '{print $1}'
