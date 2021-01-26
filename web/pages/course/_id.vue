@@ -58,11 +58,13 @@
         <h2 class="font-medium tracking-wide text-gray-500 uppercase text-md">
           Course Lessons
         </h2>
-        <ul class="">
+        <ul>
           <li
             v-for="(lesson, i) in course.lessons"
             :key="i"
-            class="flex col-span-1 mt-3 rounded-md shadow-sm"
+            class="flex col-span-1 mt-3 rounded-md shadow-sm focus-within:ring-2 focus-within:ring-purple-500"
+            :class="clesson.id === lesson.id ? 'ring-2 ring-purple-500' : ''"
+            @click="play(lesson)"
           >
             <div
               class="flex items-center justify-center flex-shrink-0 p-4 text-2xl font-medium text-white bg-gray-700 w-13 rounded-l-md"
@@ -89,10 +91,8 @@
                 <p class="hidden mr-4 lg:block">
                   {{ lesson.duration }}
                 </p>
-                <button
-                  v-if="!isPlaying(lesson)"
-                  class="inline-flex items-center justify-center w-8 h-8 text-gray-400 bg-transparent rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  @click="play(lesson)"
+                <div
+                  class="inline-flex items-center justify-center w-8 h-8 text-gray-400 bg-transparent rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   <span class="sr-only">Open options</span>
                   <!-- Heroicon name: dots-vertical -->
@@ -116,32 +116,7 @@
                       d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     ></path>
                   </svg>
-                </button>
-                <button
-                  v-if="isPlaying(lesson)"
-                  class="inline-flex items-center justify-center w-8 h-8 text-gray-400 bg-transparent rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  @click="stop(lesson)"
-                >
-                  <span class="sr-only">Open options</span>
-                  <!-- Heroicon name: dots-vertical -->
-                  <svg
-                    class="w-8 h-8"
-                    :class="
-                      isPlaying(lesson) ? 'animate-spin duration-2000' : ''
-                    "
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
-                </button>
+                </div>
               </div>
             </div>
           </li>
@@ -166,27 +141,17 @@ export default {
     course() {
       return this.$store.state.currentCourse
     },
+    clesson() {
+      return this.$store.state.lesson === null ? {} : this.$store.state.lesson
+    },
   },
   mounted() {
     this.player = document.getElementById('myAudio')
   },
   methods: {
-    isPlaying(lesson) {
-      if (this.playingLesson === lesson) {
-        if (this.playing === true) return true
-      }
-      return false
-    },
     play(lesson) {
-      this.playingLesson = lesson
-      this.playing = true
-      this.currentAudioUrl = lesson.audioUrl
-      this.player.play()
-    },
-    stop(lesson) {
-      this.playingLesson = ''
-      this.playing = false
-      this.player.pause()
+      this.$store.commit('updateLesson', lesson)
+      this.$nuxt.$emit('updateAudio')
     },
   },
 }
