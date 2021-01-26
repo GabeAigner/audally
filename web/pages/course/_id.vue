@@ -148,15 +148,6 @@
         </ul>
       </div>
     </div>
-    <div
-      class="fixed bottom-0 w-full h-20 bg-white border-2 border-blue-400 left-64"
-    >
-      <vue-plyr class="relative">
-        <audio controls crossorigin playsinline preload="auto">
-          <source id="plyr" :src="current" type="audio/mp3" />
-        </audio>
-      </vue-plyr>
-    </div>
   </div>
 </template>
 
@@ -165,15 +156,16 @@ export default {
   layout: 'next',
   data() {
     return {
-      course: '',
       player: null,
       playing: false,
       playingLesson: '',
       currentAudioUrl: '',
     }
   },
-  created() {
-    this.course = this.$store.state.currentCourse
+  computed: {
+    course() {
+      return this.$store.state.currentCourse
+    },
   },
   mounted() {
     this.player = document.getElementById('myAudio')
