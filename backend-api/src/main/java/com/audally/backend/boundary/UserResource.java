@@ -92,7 +92,7 @@ public class UserResource {
         User user = userRepository.findById(uid);
         if(user == null){
             return Response
-                    .status(202,"User does not exist!")
+                    .status(204,"User does not exist!")
                     .build();
         }
         /*
@@ -108,7 +108,7 @@ public class UserResource {
         User user = userRepository.findById(uid);
         if(user == null){
             return Response
-                    .status(202,"User does not exist")
+                    .status(204,"User does not exist")
                     .build();
         }
         doLoader(user);
@@ -120,7 +120,7 @@ public class UserResource {
         User user = userRepository.findById(uid);
         if(user == null){
             return Response
-                    .status(202,"User does not exist")
+                    .status(204,"User does not exist")
                     .build();
         }
         doLoader(user);
@@ -148,7 +148,7 @@ public class UserResource {
         User user = userRepository.findById(uid);
         if(user == null){
             return Response
-                    .status(202,"Course already exists in the User!")
+                    .status(204,"User was not found!")
                     .build();
         }
         doLoader(user);
