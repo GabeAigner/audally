@@ -287,7 +287,7 @@ public class UserResource {
         User change = userRepository.findById(uid);
         if(change != null && change.getCourses().contains(courseRepository.findById(cid)) == true){
             change.getCourses().remove(courseRepository.findById(cid));
-            userRepository.getEntityManager().merge(change);
+            userRepository.persist(change);
             return Response
                     .status(202,"Course was removed from the user!")
                     .build();
@@ -298,10 +298,9 @@ public class UserResource {
     @Path("{id}")
     public Response updateUser(@PathParam("id")Long uid,User user){
         User updated = userRepository.findById(uid);
-        if (updated != null &&
-                userRepository.find("email",user.getEmail()).count() == 0){
+        if (updated != null){
             updated.copyProperties(user);
-            userRepository.getEntityManager().merge(updated);
+            userRepository.persist(updated);
             return Response
                     .status(202,"User was updated")
                     .build();
