@@ -2,6 +2,8 @@ package com.audally.backend.control;
 
 import com.audally.backend.entity.Course;
 import com.audally.backend.entity.Lesson;
+import com.audally.backend.entity.Progress;
+import com.audally.backend.entity.User;
 import io.quarkus.runtime.StartupEvent;
 import org.jboss.logging.Logger;
 
@@ -10,21 +12,41 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.LocalTime;
+import java.util.List;
 
 @ApplicationScoped
+@Transactional
 public class InitBean {
 
-
+    @Inject
+    UserRepository userRepository;
     @Inject
     CourseRepository courseRepository;
-
+    ProgressRepository progressRepository;
     @Inject
     LessonRepository lessonRepository;
 
     void onStartup(@Observes StartupEvent event) {
-        fillLessons();
-        fillCourses();
+        //fillLessons(); // Comment it out if you are doing tests.
+        //fillCourses(); // Comment it out if you are doing tests.
+        //fillUsers(); // Comment it out if you are doing tests.
     }
+
+    /*@Transactional
+    private void fillUsers() {
+        User john = userRepository.findById(1L);
+        User jane = userRepository.findById(2L);
+        doLoader(john);
+        doLoader(jane);
+        john.getCourses().add(courseRepository.findById(4L));
+        john.getCourses().forEach(course -> course.getLessons()
+                .forEach(lesson -> progressRepository
+                        .createProgress(lesson.getId(),new Progress(),john)));
+        jane.getCourses().add(courseRepository.findById(4L));
+        jane.getCourses().forEach(course -> course.getLessons()
+                .forEach(lesson -> progressRepository
+                        .createProgress(lesson.getId(),new Progress(),jane)));
+    }*/
 
     @Transactional
     public void fillLessons() {
@@ -72,6 +94,11 @@ public class InitBean {
         //course3.setLessons(lessonRepository.listAll());
         courseRepository.persist(course3);
     }
-
+    public void doLoader(User user){
+        List<Course> load = user.getCourses();
+        load.forEach(course -> course.getLessons());
+        user.getSubscriptions();
+        user.getProgresses();
+    }
 }
 
