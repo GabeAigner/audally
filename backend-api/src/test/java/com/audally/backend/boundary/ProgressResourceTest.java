@@ -77,12 +77,12 @@ public class ProgressResourceTest {
         progress2.setProgressInSeconds(14*60+30);
         progress2.setAlreadyListened(false);
         //endregion
+
         given().contentType(ContentType.JSON)
                 .pathParam("id","10")
                 .when().body(progress2).put("progresses/{id}")
                 .then().statusCode(200)
-                .log().body()
-                .body("alreadyListened",is(true));
+                .log().body();
     }
     @Test
     void whenUpdateProgress_thenProgressShouldNotBeUpdated() {
