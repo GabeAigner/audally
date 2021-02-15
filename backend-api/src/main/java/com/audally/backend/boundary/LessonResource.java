@@ -4,6 +4,7 @@ import com.audally.backend.control.CourseRepository;
 import com.audally.backend.control.LessonRepository;
 import com.audally.backend.entity.Course;
 import com.audally.backend.entity.Lesson;
+import com.audally.backend.entity.User;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -41,14 +42,8 @@ public class LessonResource {
         if(read == null)return Response.noContent().build();
         Arrays.stream(lessons)
                 .forEach(l -> {
-//                    lessonRepository.persist(l);
-                  /*Lesson created = new Lesson();
-                    created.copyProperties(l);
-                    read.addLessons((lessonRepository.getEntityManager().merge(created)));
-                    */
                     Lesson created = new Lesson();
                     created.copyProperties(l);
-//                    created.setCourse(read);
                     lessonRepository.persist(created);
                     read.getLessons().add(lessonRepository.findById(created.getId()));
                 });
@@ -71,7 +66,7 @@ public class LessonResource {
         List<Lesson> ToDeleteLessons = new ArrayList<>();
         change.getLessons().stream()
                 .forEach(l -> {
-                    if(Arrays.stream(lessons).anyMatch(nl -> nl.getId().equals(l.getId())) == true){
+                    if(Arrays.stream(lessons).anyMatch(nl -> nl.getId().equals(l.getId()))){
                         toDelete.set(true);
                         ToDeleteLessons.add(l);
                         lessonRepository.delete(l);

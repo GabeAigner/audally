@@ -125,24 +125,10 @@ public class UserResource {
                     .build();
         }
         doLoader(user);
-        return Response.ok(user.getProgresses()
-                .stream().filter(progress -> {
-                    AtomicBoolean check = new AtomicBoolean(false);
-                    user.getCourses().stream()
-                            .filter(course -> course.getId().equals(cid))
-                            .map(course -> course.getLessons())
-                            .forEach(lessonList -> {
-                                Optional<Lesson> l = lessonList.stream()
-                                    .filter(lesson -> lesson.getId().equals(progress.getId()))
-                                    .findFirst();
-                                if(l.isPresent()){
-                                    check.set(true);
-                                }
-                            });
-                    return check.get();
-                }).collect(Collectors.toList()))
+        return Response.ok(progressRepository.getProgressesOfCourse(cid, user))
         .build();
     }
+
     @GET
     @Path("/{UserId}/lessons/{LessonId}/progresses")
     public Response getLessonProgressOfUser(@PathParam("UserId") Long uid,@PathParam("LessonId") Long lid){
@@ -184,32 +170,14 @@ public class UserResource {
                     .status(202, "Progress already exists! Use update method!")
                     .build();
         }
-        user.getCourses().stream()
-                .forEach(course -> {
-                    Optional<Lesson> l = course.getLessons().stream()
-                            .filter(lesson -> lesson.getId().equals(lid))
-                            .findFirst();
-                    if(l.isPresent()){
-                        Progress insertProgress = new Progress();
-                        String[] parts = l.get().getDuration().toString().split(":");
-                        Duration duration = Duration
-                                .ofHours(Long.parseLong(parts[0]))
-                                .plusMinutes(Long.parseLong(parts[1]))
-                                .plusSeconds(Long.parseLong(parts[2]));
-                        if(!progress.isAlreadyListened() &&
-                                progress.getProgressInSeconds() > (duration.getSeconds() - 30)){
-                            progress.setAlreadyListened(true);
-                        }
-                        insertProgress.copyProperties(progress);
-                        insertProgress.setLesson(l.get());
-                        progressRepository.persist(insertProgress);
-                        user.getProgresses().add(insertProgress);
-                    }
-                });
-
+        //region construct Progress
+        progressRepository.createProgress(lid, progress, user);
+        //endregion
         userRepository.persist(user);
         return Response.ok(user.getProgresses()).build();
     }
+
+
     @POST
     @Path("{UserId}/courses/{CourseId}")
     public Response addCourseToUser(@PathParam("UserId") Long uid

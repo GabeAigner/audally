@@ -33,22 +33,9 @@ public class ProgressResource {
                     .status(204,"Progress was not found!")
                     .build();
         }
-        Lesson l = found.getLesson();
-        String[] parts = l.getDuration().toString().split(":");
-        Duration duration = Duration
-                .ofHours(Long.parseLong(parts[0]))
-                .plusMinutes(Long.parseLong(parts[1]))
-                .plusSeconds(Long.parseLong(parts[2]));
-        if(!progress.isAlreadyListened()
-                && progress.getProgressInSeconds()
-                > (duration.getSeconds()-30)) {
-            progress.setAlreadyListened(true);
-        }
-        if(found.isAlreadyListened()){
-            found.copyProperties(progress);
-            found.setAlreadyListened(true);
-        }else found.copyProperties(progress);
-        progressRepository.persist(found);
+        progressRepository.updateProgress(progress, found);
         return Response.ok(found).build();
     }
+
+
 }
