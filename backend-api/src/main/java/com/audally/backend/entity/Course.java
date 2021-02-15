@@ -21,6 +21,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -62,5 +63,15 @@ public class Course implements Serializable {
         this.lessons = course.getLessons();
         this.description = course.getDescription();
         this.pictureUrl = course.getPictureUrl();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Course)) return false;
+        Course course = (Course) o;
+        return getName().equals(course.getName()) && Objects.equals(getDescription(),
+                course.getDescription()) && Objects.equals(getPictureUrl(),
+                course.getPictureUrl());
     }
 }
