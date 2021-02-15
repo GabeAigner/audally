@@ -11,13 +11,20 @@ import com.audally.backend.entity.Progress;
 import com.audally.backend.entity.User;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.mock.PanacheMock;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
+import org.jboss.resteasy.annotations.cache.NoCache;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import java.time.LocalTime;
 import java.util.Optional;
 
@@ -34,6 +41,8 @@ public class UserResourceTest {
     CourseRepository courseRepository;
     @InjectMock
     LessonRepository lessonRepository;
+    @InjectMock
+    SecurityIdentity identity;
     @InjectMock
     ProgressRepository progressRepository;
 
@@ -207,6 +216,14 @@ public class UserResourceTest {
                 .body("lessons", hasItems(course1.getLessons(),course2.getLessons()));
     }
     @Test
+    void whenGetCoursesByUser_thenUserShouldNotBeFound() {
+        Mockito.when(userRepository.findById(10L)).thenReturn(null);
+
+        given().contentType(ContentType.JSON).pathParam("UserId","10")
+                .when().get("/users/{UserId}/courses")
+                .then().statusCode(204);
+    }
+    @Test
     void whenGetProgressOfUser_thenProgressOfUserShouldBeFound() {
         //region Init
         User user = new User();
@@ -233,6 +250,14 @@ public class UserResourceTest {
                 .log().body()
                 .body("progressInSeconds",hasItem(14*60+30))
                 .body("lesson.name",hasItems("First mock Lesson Name"));
+    }
+    @Test
+    void whenGetProgressOfUser_thenUserShouldNotBeFound() {
+        Mockito.when(userRepository.findById(10L)).thenReturn(null);
+
+        given().contentType(ContentType.JSON).pathParam("UserId","10")
+                .when().get("/users/{UserId}/progresses")
+                .then().statusCode(204);
     }
     @Test
     void whenGetProgressByCourseOfUser_thenProgressByCourseOfUserShouldBeFound() {
@@ -269,6 +294,32 @@ public class UserResourceTest {
                 .body("lesson.name",hasItems("First mock Lesson Name"));
     }
     @Test
+    void whenGetProgressByCourseOfUser_thenUserShouldNotBeFound() {
+        //region Init
+        Lesson lesson1 = new Lesson();
+        lesson1.setId(10L);
+        lesson1.setDescription("First mock lesson description");
+        lesson1.setName("First mock Lesson Name");
+        lesson1.setDuration(LocalTime.of(0,14,59));
+        Course course1 = new Course();
+        course1.setId(10L);
+        course1.setDescription("This is the first mock description");
+        course1.setName("First mock course!");
+        course1.getLessons().add(lesson1);
+        Progress progress1 = new Progress();
+        progress1.setLesson(lesson1);
+        progress1.setId(10L);
+        progress1.setProgressInSeconds(14*60+30);
+        progress1.setAlreadyListened(false);
+        //endregion
+        Mockito.when(userRepository.findById(10L)).thenReturn(null);
+        Mockito.when(courseRepository.findById(10L)).thenReturn(course1);
+        given().contentType(ContentType.JSON).pathParam("UserId","10")
+                .pathParam("CourseId","10")
+                .when().get("users/{UserId}/courses/{CourseId}/progresses")
+                .then().statusCode(204);
+    }
+    @Test
     void whenGetProgressByCourseOfUser_thenProgressByCourseOfUserShouldNotBeFound() {
         //region Init
         User user = new User();
@@ -295,7 +346,8 @@ public class UserResourceTest {
         //endregion
         Mockito.when(userRepository.findById(10L)).thenReturn(user);
         Mockito.when(courseRepository.findById(10L)).thenReturn(course1);
-        given().contentType(ContentType.JSON).pathParam("UserId","10").pathParam("CourseId","11")
+        given().contentType(ContentType.JSON).pathParam("UserId","10")
+                .pathParam("CourseId","11")
                 .when().get("users/{UserId}/courses/{CourseId}/progresses")
                 .then().statusCode(200);
     }
@@ -331,6 +383,44 @@ public class UserResourceTest {
                 .log().body()
                 .body("progressInSeconds",is(progress1.getProgressInSeconds()))
                 .body("lesson.name",is("First mock Lesson Name"));
+    }
+    @Test
+    void whenGetProgressForUser_thenUserShouldNotExist() {
+        Mockito.when(userRepository.findById(10L)).thenReturn(null);
+        given().contentType(ContentType.JSON)
+                .pathParam("UserId","10").pathParam("LessonId","10")
+                .when().get("users/{UserId}/lessons/{LessonId}/progresses")
+                .then().statusCode(204);
+    }
+    @Test
+    void whenGetProgressOfLessonsForUser_thenProgressOfLessonsUserShouldNotExist() {
+        //region Init
+        User user = new User();
+        user.setEmail("mock@email.com");
+        user.setUserName("mock");
+        user.setId(10L);
+        Lesson lesson1 = new Lesson();
+        lesson1.setId(10L);
+        lesson1.setDescription("First mock lesson description");
+        lesson1.setName("First mock Lesson Name");
+        Course course1 = new Course();
+        course1.setId(10L);
+        course1.setDescription("This is the first mock description");
+        course1.setName("First mock course!");
+        course1.getLessons().add(lesson1);
+        user.getCourses().add(course1);
+        Progress progress1 = new Progress();
+        progress1.setProgressInSeconds(14*60+30);
+        progress1.setAlreadyListened(false);
+        progress1.setLesson(lesson1);
+        user.getProgresses().add(progress1);
+        //endregion
+        Mockito.when(userRepository.findById(10L)).thenReturn(user);
+
+        given().contentType(ContentType.JSON)
+                .pathParam("UserId","10").pathParam("LessonId","11")
+                .when().get("users/{UserId}/lessons/{LessonId}/progresses")
+                .then().statusCode(204);
     }
     @Test
     void whenPostProgressForUser_thenProgressOfUserShouldExist() {
@@ -396,6 +486,7 @@ public class UserResourceTest {
                 .body("progressInSeconds",hasItem(progress1.getProgressInSeconds()))
                 .body("lesson.name",hasItem("First mock Lesson Name"));
     }
+
     @Test
     void whenPostCourseForUser_thenCourseOfUserShouldBeFound() {
         //region Init
@@ -425,7 +516,85 @@ public class UserResourceTest {
                 .body("courses.description",hasItem("This is the first mock description"))
                 .body("courses.lessons",hasSize(1));
     }
+    @Test
+    void whenPostCourseForUser_thenCourseOfUserShouldNotBeFound() {
+        //region Init
+        User user = new User();
+        user.setEmail("mock@email.com");
+        user.setUserName("mock");
+        user.setId(10L);
+        Lesson lesson1 = new Lesson();
+        lesson1.setId(10L);
+        lesson1.setDescription("First mock lesson description");
+        lesson1.setName("First mock Lesson Name");
+        lesson1.setDuration(LocalTime.of(0,14,59));
+        Course course1 = new Course();
+        course1.setId(10L);
+        course1.setDescription("This is the first mock description");
+        course1.setName("First mock course!");
+        course1.getLessons().add(lesson1);
+        //endregion
+        Mockito.when(userRepository.findById(10L)).thenReturn(user);
+        Mockito.when(courseRepository.findById(10L)).thenReturn(null);
 
+        given().contentType(ContentType.JSON)
+                .pathParam("UserId","10").pathParam("CourseId","10")
+                .when().body(course1).post("users/{UserId}/courses/{CourseId}")
+                .then().statusCode(204);
+    }
+    @Test
+    void whenPostCourseForUser_thenUserShouldNotBeFound() {
+        //region Init
+        User user = new User();
+        user.setEmail("mock@email.com");
+        user.setUserName("mock");
+        user.setId(10L);
+        Lesson lesson1 = new Lesson();
+        lesson1.setId(10L);
+        lesson1.setDescription("First mock lesson description");
+        lesson1.setName("First mock Lesson Name");
+        lesson1.setDuration(LocalTime.of(0,14,59));
+        Course course1 = new Course();
+        course1.setId(10L);
+        course1.setDescription("This is the first mock description");
+        course1.setName("First mock course!");
+        course1.getLessons().add(lesson1);
+        //endregion
+        Mockito.when(userRepository.findById(10L)).thenReturn(null);
+        Mockito.when(courseRepository.findById(10L)).thenReturn(course1);
+
+        given().contentType(ContentType.JSON)
+                .pathParam("UserId","10").pathParam("CourseId","10")
+                .when().body(course1).post("users/{UserId}/courses/{CourseId}")
+                .then().statusCode(204);
+    }
+    @Test
+    void whenPostCourseForUser_thenCourseOfUserShouldAlreadyExist() {
+        //region Init
+        User user = new User();
+        user.setEmail("mock@email.com");
+        user.setUserName("mock");
+        user.setId(10L);
+        Lesson lesson1 = new Lesson();
+        lesson1.setId(10L);
+        lesson1.setDescription("First mock lesson description");
+        lesson1.setName("First mock Lesson Name");
+        lesson1.setDuration(LocalTime.of(0,14,59));
+        Course course1 = new Course();
+        course1.setId(10L);
+        course1.setDescription("This is the first mock description");
+        course1.setName("First mock course!");
+        course1.getLessons().add(lesson1);
+        user.getCourses().add(course1);
+        //endregion
+        Mockito.when(userRepository.findById(10L)).thenReturn(user);
+        Mockito.when(courseRepository.findById(10L)).thenReturn(course1);
+
+        given().contentType(ContentType.JSON)
+                .pathParam("UserId","10").pathParam("CourseId","10")
+                .when().body(course1).post("users/{UserId}/courses/{CourseId}")
+                .then().statusCode(406);
+    }
     @Test
     void whenPostUser_thenUserShouldBeFound() {
         User user = new User();
@@ -593,5 +762,33 @@ public class UserResourceTest {
                 .pathParam("id","10")
                 .when().body(user1).put("users/{id}")
                 .then().statusCode(204);
+    }
+    @Test
+    @TestSecurity(authorizationEnabled = false,user = "testbert",roles = {"admin"})
+    void whenGetUserInfo_thenAdminInfoShouldBeReturned() {
+        //region Init
+        given().when().get("users/secret")
+                .then().statusCode(200);
+    }
+    @Test
+    @TestSecurity(user = "testbert")
+    void whenGetUserInfo_thenAdminInfoShouldNotBeReturned() {
+        //region Init
+        given().when().get("users/secret")
+                .then().statusCode(403);
+    }
+    @Test
+    @TestSecurity(authorizationEnabled = false,user = "testbert",roles = {"user"})
+    void whenGetUserInfo_thenUserInfoShouldBeReturned() {
+        //region Init
+        given().when().get("users")
+                .then().statusCode(200);
+    }
+    @Test
+    @TestSecurity(user = "testbert")
+    void whenGetUserInfo_thenUserInfoShouldNotBeReturned() {
+        //region Init
+        given().when().get("users")
+                .then().statusCode(403);
     }
 }
