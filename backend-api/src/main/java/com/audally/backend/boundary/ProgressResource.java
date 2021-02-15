@@ -28,7 +28,6 @@ public class ProgressResource {
     @Path("{ProgressId}")
     public Response updateProgressToUser(@PathParam("ProgressId") Long pid, Progress progress){
         Progress found = progressRepository.findById(pid);
-        found.getLesson();
         if(found == null){
             return Response
                     .status(204,"Progress was not found!")

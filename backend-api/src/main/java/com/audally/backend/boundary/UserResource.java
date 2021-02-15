@@ -116,7 +116,8 @@ public class UserResource {
     }
     @GET
     @Path("/{UserId}/courses/{CourseId}/progresses")
-    public Response getProgressesOfCourse(@PathParam("UserId") Long uid, @PathParam("CourseId") Long cid){
+    public Response getProgressesOfCourse(@PathParam("UserId") Long uid,
+                                          @PathParam("CourseId") Long cid){
         User user = userRepository.findById(uid);
         if(user == null){
             return Response
@@ -171,12 +172,12 @@ public class UserResource {
     public Response addProgressToUser(@PathParam("UserId") Long uid
             ,@PathParam("LessonId") Long lid,Progress progress){
         User user = userRepository.findById(uid);
-        doLoader(user);
         if(user == null){
             return Response
                     .status(204,"User was not found!")
                     .build();
         }
+        doLoader(user);
         if(user.getProgresses()
         .stream().anyMatch(progress1 -> progress1.getLesson().getId().equals(lid))) {
             return Response
@@ -215,11 +216,9 @@ public class UserResource {
             ,@PathParam("CourseId") Long cid){
         User user = userRepository.findById(uid);
         Course course = courseRepository.findById(cid);
-        course.getLessons();
-        doLoader(user);
-        if(user.getCourses().contains(course)){
+        if(course == null){
             return Response
-                    .status(406,"Course already exists in the User!")
+                    .status(204,"Course was not found!")
                     .build();
         }
         if(user == null){
@@ -227,12 +226,13 @@ public class UserResource {
                     .status(204,"User was not found!")
                     .build();
         }
-
-        else if(course == null){
+        else if(user.getCourses().contains(course)){
             return Response
-                    .status(204,"Course was not found!")
+                    .status(406,"Course already exists in the User!")
                     .build();
         }
+        course.getLessons();
+        doLoader(user);
         user.getCourses().add(course);
         userRepository.persist(user);
         return Response.ok(user).build();
@@ -308,12 +308,12 @@ public class UserResource {
         return Response.noContent().build();
     }
 
-    public static <T> Predicate<T> distinctByKey(
+    /*public static <T> Predicate<T> distinctByKey(
             Function<? super T, ?> keyExtractor) {
 
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
-    }
+    }*/
     public void doLoader(User user){
         List<Course> load = user.getCourses();
         load.forEach(course -> course.getLessons());

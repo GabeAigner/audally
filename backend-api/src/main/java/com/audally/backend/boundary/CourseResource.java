@@ -28,10 +28,7 @@ public class CourseResource {
 
     @POST
     public Response addCourse(Course course){
-        if(courseRepository.findAll().stream().anyMatch(course1 ->
-                        course1.getName().equals(course.getName()) &&
-                        course1.getDescription().equals(course.getDescription()) &&
-                        course1.getLessons().equals(course.getLessons()))){
+        if(courseRepository.findAll().list().stream().anyMatch(course1 -> course1.equals(course))){
             return Response
                     .status(406,"Course already exists!")
                     .build();

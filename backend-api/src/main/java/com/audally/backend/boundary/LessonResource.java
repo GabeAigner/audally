@@ -28,15 +28,14 @@ public class LessonResource {
     CourseRepository courseRepository;
 
     @GET
-    @Path("getLessonOfCourse/{id}")
-    public Response getLessonsOfCourse(@PathParam("id") Long cid){
+    @Path("/course/{cid}")
+    public Response getLessonsOfCourse(@PathParam("cid") Long cid){
         Course read = courseRepository.findById(cid);
         if(read == null)return Response.noContent().build();
         return Response.ok(read.getLessons()).build();
-
     }
     @POST
-    @Path("addLessonsToCourse/{cid}")
+    @Path("/course/{cid}")
     public Response addLessonToCourse(@PathParam("cid") Long cid,Lesson[] lessons){
         Course read = courseRepository.findById(cid);
         if(read == null)return Response.noContent().build();
@@ -57,7 +56,7 @@ public class LessonResource {
         return Response.ok(courseRepository.findById(cid)).build();
     }
     @DELETE
-    @Path("rmvLessonsFromCourse/{cid}")
+    @Path("/course/{cid}")
     public Response removeLessonsFromCourse
             (@PathParam("cid") Long cid,Lesson[] lessons){
         Course change = courseRepository.findById(cid);
