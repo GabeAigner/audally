@@ -254,12 +254,14 @@
                   aria-labelledby="options-menu"
                 >
                   <div class="py-1">
-                    <a
+                    <button
                       href="#"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                      >View profile</a
+                      @click="toggleProfile()"
                     >
+                      View profile
+                    </button>
                     <a
                       href="#"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -462,15 +464,15 @@
                 </button>
               </div>
               <!--
-              Profile dropdown panel, show/hide based on dropdown state.
+                Profile dropdown panel, show/hide based on dropdown state.
 
-              Entering: "transition ease-out duration-100"
-                From: "transform opacity-0 scale-95"
-                To: "transform opacity-100 scale-100"
-              Leaving: "transition ease-in duration-75"
-                From: "transform opacity-100 scale-100"
-                To: "transform opacity-0 scale-95"
-            -->
+                Entering: "transition ease-out duration-100"
+                  From: "transform opacity-0 scale-95"
+                  To: "transform opacity-100 scale-100"
+                Leaving: "transition ease-in duration-75"
+                  From: "transform opacity-100 scale-100"
+                  To: "transform opacity-0 scale-95"
+              -->
               <transition
                 enter-active-class="transition duration-100 ease-out"
                 enter-class="transform scale-95 opacity-0"
@@ -543,6 +545,36 @@
         class="relative z-0 flex-1 overflow-y-auto lg:border-l-2 lg:border-gray-700 focus:outline-none"
         tabindex="0"
       >
+        <div
+          v-show="
+            lesson !== null &&
+            Object.keys(lesson).length !== 0 &&
+            $auth.loggedIn
+          "
+          class="fixed bottom-0 left-0 right-0 flex p-2 bg-gray-800 border-t-2 border-gray-700 lg:border-l-2 lg:left-64"
+        >
+          <div
+            class="flex flex-col justify-center w-1/4 px-4 font-medium text-center text-white hover:text-gray-300"
+          >
+            <h3 class="truncate ... border-2 border-gray-700 rounded-full py-2">
+              {{ lesson !== null ? lesson.name : '' }}
+            </h3>
+          </div>
+
+          <div class="w-3/4">
+            <vue-plyr
+              ref="plyr"
+              :emit="['pause', 'ended']"
+              class="relative"
+              @pause="pauseAction"
+              @ended="endedAction"
+            >
+              <audio id="plyr" controls crossorigin playsinline preload="auto">
+                <source :src="current" type="audio/mp3" />
+              </audio>
+            </vue-plyr>
+          </div>
+        </div>
         <Nuxt />
         <!--<div class="py-6">
           <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -556,6 +588,7 @@
             </div>
           </div>
         </div>-->
+        <!-- Bottom Bar for Audio Player -->
       </main>
     </div>
   </div>
@@ -565,9 +598,13 @@
 export default {
   data() {
     return {
+      current: '',
+      audio: '',
+      currentTime: null,
       logged: false,
       showMobileMenu: false,
       showProfileDropdown: false,
+      showProfile: false,
       other: false,
       menuItem: [
         {
@@ -578,7 +615,85 @@ export default {
       ],
     }
   },
+  computed: {
+    lesson() {
+      return this.$store.state.lesson
+    },
+    progress() {
+      return this.$store.state.currentProgress
+    },
+    user() {
+      return this.$store.state.user
+    },
+    course() {
+      return this.$store.state.currentCourse
+    },
+  },
+  mounted() {
+    this.audio = document.getElementById('plyr')
+
+    this.$refs.plyr.player.on('pause', () => this.pauseAction())
+    this.$refs.plyr.player.on('ended', () => this.endedAction())
+
+    /*
+    PUT http://localhost:8080/api/progresses/1
+Content-Type: application/json
+
+{
+  "progressInSeconds": 200,
+  "alreadyListened": false
+} */
+    /*
+    this.audio.onpauseonpause = function () {
+      console.log('paused')
+
+    }
+    */
+
+    this.$nuxt.$on('updateAudio', () => {
+      this.updateAudio()
+    })
+  },
   methods: {
+    toggleProfile() {
+      this.showProfile = !this.showProfile
+      this.showProfileDropdown = !this.showProfileDropdown
+    },
+    pauseAction() {
+      console.log('paused')
+      const uProgress = {
+        progressInSeconds: Math.floor(this.audio.currentTime),
+        alreadyListened: this.progress.alreadyListened,
+      }
+
+      this.$axios.put(
+        'http://localhost:8080/api/progresses/' + this.progress.id,
+        uProgress
+      )
+      setTimeout(() => {
+        fetch(
+          'http://localhost:8080/api/users/' +
+            this.user.id +
+            '/courses/' +
+            this.course.id +
+            '/progresses'
+        )
+          .then((response) => response.json())
+          .then((data) => this.$store.commit('updateProgresses', data))
+      }, 150)
+    },
+    endedAction() {
+      this.pauseAction()
+    },
+    updateAudio() {
+      this.current =
+        this.lesson.audioUrl + '#t=' + this.progress.progressInSeconds
+      console.log(this.current)
+      // document.getElementById('plyr').src += this.current
+      this.audio.pause()
+      this.audio.load()
+      this.audio.play()
+    },
     openMobileMenu() {
       this.other = !this.other
       this.showMobileMenu = !this.showMobileMenu
@@ -597,6 +712,11 @@ export default {
 </script>
 
 <style>
+body {
+  --plyr-color-main: #6b46c1;
+  --plyr-audio-controls-background: #1f2937;
+  --plyr-audio-control-color: white;
+}
 :focus {
   outline: none !important;
 }
