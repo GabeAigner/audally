@@ -27,26 +27,30 @@ public class InitBean {
     LessonRepository lessonRepository;
 
     void onStartup(@Observes StartupEvent event) {
-        //fillLessons(); // Comment it out if you are doing tests.
-        //fillCourses(); // Comment it out if you are doing tests.
-        //fillUsers(); // Comment it out if you are doing tests.
+        fillLessons(); // Comment it out if you are doing tests.
+        fillCourses(); // Comment it out if you are doing tests.
+        fillUsers(); // Comment it out if you are doing tests.
     }
 
-    /*@Transactional
+    @Transactional
     private void fillUsers() {
-        User john = userRepository.findById(1L);
-        User jane = userRepository.findById(2L);
-        doLoader(john);
-        doLoader(jane);
-        john.getCourses().add(courseRepository.findById(4L));
-        john.getCourses().forEach(course -> course.getLessons()
-                .forEach(lesson -> progressRepository
-                        .createProgress(lesson.getId(),new Progress(),john)));
-        jane.getCourses().add(courseRepository.findById(4L));
-        jane.getCourses().forEach(course -> course.getLessons()
-                .forEach(lesson -> progressRepository
-                        .createProgress(lesson.getId(),new Progress(),jane)));
-    }*/
+        User john = new User();
+        john.setEmail("john@doe.co");
+        john.setUserName("john");
+        userRepository.persist(john);
+        User jane = new User();
+        jane.setEmail("jane@doe.co");
+        jane.setUserName("jane");
+        userRepository.persist(jane);
+        User admin = new User();
+        admin.setEmail("admin@admin.co");
+        admin.setUserName("admin");
+        userRepository.persist(admin);
+        User creator = new User();
+        creator.setEmail("creator@creator.co");
+        creator.setUserName("creator");
+        userRepository.persist(creator);
+    }
 
     @Transactional
     public void fillLessons() {
@@ -154,21 +158,21 @@ public class InitBean {
         //course7.setLessons(lessonRepository.listAll());
         courseRepository.persist(course7);
         Course course8 = new Course();
-        course8.setDescription("This podcast aims to tell people how to correctly use Fitavari.");
-        course8.setName("Fitavari - How to use it correctly!");
-        course8.setPictureUrl("https://unsplash.com/photos/IHL-Jbawvvo");
+        course8.setDescription("A memoir by the creator of NIKE");
+        course8.setName("Shoe Dog - Phil Knight");
+        course8.setPictureUrl("https://images.unsplash.com/photo-1556906781-9a412961c28c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80");
         //course8.setLessons(lessonRepository.listAll());
         courseRepository.persist(course8);
         Course course9 = new Course();
-        course9.setDescription("This podcast will be the best one out there!");
-        course9.setName("Some Course that is related to Audally.");
-        course9.setPictureUrl("https://unsplash.com/photos/IHL-Jbawvvo");
+        course9.setDescription("The course to achieve a healthier and happier life.");
+        course9.setName("Start to be happy!");
+        course9.setPictureUrl("https://images.unsplash.com/photo-1579722820308-d74e571900a9?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80");
         //course6.setLessons(lessonRepository.listAll());
         courseRepository.persist(course9);
         Course course10 = new Course();
-        course10.setDescription("10th course Anniversary. A one in a life time opportunity");
-        course10.setName("The 10th Course to get you started with Audally.");
-        course10.setPictureUrl("https://unsplash.com/photos/IHL-Jbawvvo");
+        course10.setDescription("A course about business development.");
+        course10.setName("How to Startup?");
+        course10.setPictureUrl("https://images.unsplash.com/photo-1489533119213-66a5cd877091?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=751&q=80");
         //course10.setLessons(lessonRepository.listAll());
         courseRepository.persist(course10);
     }
