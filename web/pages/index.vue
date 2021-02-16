@@ -24,7 +24,7 @@
       </li>-->
       </div>
       <PersonalCourses
-        v-if="this.$store.state.personalCourses.length != 0"
+        v-if="this.$store.state.personalCourses.length != 0 && $auth.loggedIn"
         :userid="user.id"
         @toggleToast="toggleToast(false)"
       ></PersonalCourses>
@@ -56,6 +56,7 @@ export default {
         .then((response) => response.json())
         .then((data) => (this.user = data))
       if (this.user !== undefined) {
+        this.$store.commit('setUser', this.user)
         await fetch(
           'http://localhost:8080/api/users/' + this.user.id + '/courses'
         )
