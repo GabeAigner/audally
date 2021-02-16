@@ -1,9 +1,13 @@
+import createPersistedState from 'vuex-persistedstate'
+
 export const state = () => ({
   currentCourse: {},
   courses: [],
+  user: {},
   personalCourses: [],
-  isPlaying: false,
   lesson: null,
+  currentProgress: {},
+  progresses: [],
 })
 
 export const mutations = {
@@ -29,19 +33,16 @@ export const mutations = {
   },
   updateLesson(state, lesson) {
     state.lesson = lesson
-    if (lesson === null) {
-      state.isPlaying = false
-    } else {
-      state.isPlaying = true
-    }
+  },
+  setUser(state, user) {
+    state.user = user
+  },
+  updateProgress(state, prog) {
+    state.currentProgress = prog
+  },
+  updateProgresses(state, progresses) {
+    state.progresses = progresses
   },
 }
 
-export const getters = {
-  isAuthenticated(state) {
-    return state.auth.loggedIn
-  },
-  loggedInUser(state) {
-    return state.auth.user
-  },
-}
+export const plugins = [createPersistedState()]
