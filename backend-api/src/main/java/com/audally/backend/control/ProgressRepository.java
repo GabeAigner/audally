@@ -9,9 +9,11 @@ import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 public class ProgressRepository implements PanacheRepositoryBase<Progress,Long> {
 
     public List<Progress> getProgressesOfCourse(Long cid, User user) {
-        return user.getProgresses()
+        /*List<Progress> existingList = user.getProgresses()
                 .stream().filter(progress -> {
                     AtomicBoolean check = new AtomicBoolean(false);
                     user.getCourses().stream()
@@ -34,7 +36,28 @@ public class ProgressRepository implements PanacheRepositoryBase<Progress,Long> 
                                 }
                             });
                     return check.get();
-                }).collect(Collectors.toList());
+                }).collect(Collectors.toList());*/
+        List<Progress> completeList = new ArrayList<>();
+        user.getCourses()
+                .stream().filter(course -> course.getId().equals(cid))
+                .map(course -> course.getLessons())
+                .findAny().get()
+                .forEach(lesson -> {
+                    Optional<Progress> exists = user.getProgresses().stream()
+                            .filter(progress -> progress.getLesson().equals(lesson))
+                            .findFirst();
+                    if (exists.isPresent()) {
+                        completeList.add(exists.get());
+                    }else{
+                        Progress p = new Progress();
+                        p.setLesson(lesson);
+                        p.setAlreadyListened(false);
+                        p.setProgressInSeconds(0);
+                        persist(p);
+                        completeList.add(p);
+                    }
+                });
+        return completeList;
     }
     public void createProgress(Long lid, Progress progress, User user) {
         user.getCourses().stream()
