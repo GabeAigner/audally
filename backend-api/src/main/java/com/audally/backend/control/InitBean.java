@@ -22,7 +22,6 @@ public class InitBean {
     UserRepository userRepository;
     @Inject
     CourseRepository courseRepository;
-    ProgressRepository progressRepository;
     @Inject
     LessonRepository lessonRepository;
 
