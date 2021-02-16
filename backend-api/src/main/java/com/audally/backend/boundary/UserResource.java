@@ -214,24 +214,6 @@ public class UserResource {
                     .status(406,"User email already exists!")
                     .build();
         }
-        /*List<Course> normalCourses = user.courses.stream()
-                .filter(course -> course.id != null)
-                .filter(course -> courseRepository.findById(course.id).equals(course))
-                .collect(Collectors.toList());
-        List<Course> tobeAddedCourses =  user.courses.stream()
-                .filter(course -> course.id == null)
-                .collect(Collectors.toList());
-        user.courses = null;
-
-        normalCourses.stream().distinct().forEach(course -> {
-            user.courses.add(course);
-        });
-        tobeAddedCourses.stream().distinct().forEach(course -> {
-            Course newCourse = new Course();
-            newCourse.copyProperties(course);
-            courseRepository.persist(newCourse);
-            user.courses.add(courseRepository.findById(newCourse.id));
-        });*/
         entry.copyProperties(user);
         userRepository.persist(entry);
         return Response.ok(entry).build();
