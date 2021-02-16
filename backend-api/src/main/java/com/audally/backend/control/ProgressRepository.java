@@ -7,6 +7,7 @@ import com.audally.backend.entity.User;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -19,6 +20,9 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 @Transactional
 public class ProgressRepository implements PanacheRepositoryBase<Progress,Long> {
+
+    @Inject
+    UserRepository userRepository;
 
     public List<Progress> getProgressesOfCourse(Long cid, User user) {
         /*List<Progress> existingList = user.getProgresses()
@@ -54,6 +58,8 @@ public class ProgressRepository implements PanacheRepositoryBase<Progress,Long> 
                         p.setAlreadyListened(false);
                         p.setProgressInSeconds(0);
                         persist(p);
+                        user.getProgresses().add(p);
+                        userRepository.persist(user);
                         completeList.add(p);
                     }
                 });
