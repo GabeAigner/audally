@@ -456,6 +456,39 @@ public class UserResourceTest {
                 .log().body();
     }
     @Test
+    void whenPostProgressForUser_thenProgressOfUserShouldNotExist() {
+        //region Init
+        User user = new User();
+        user.setEmail("mock@email.com");
+        user.setUserName("mock");
+        user.setId(10L);
+        Lesson lesson1 = new Lesson();
+        lesson1.setId(10L);
+        lesson1.setDescription("First mock lesson description");
+        lesson1.setName("First mock Lesson Name");
+        lesson1.setDuration(LocalTime.of(0,14,59));
+        Course course1 = new Course();
+        course1.setId(10L);
+        course1.setDescription("This is the first mock description");
+        course1.setName("First mock course!");
+        course1.getLessons().add(lesson1);
+        user.getCourses().add(course1);
+        Progress progress1 = new Progress();
+        progress1.setLesson(lesson1);
+        progress1.setId(10L);
+        progress1.setProgressInSeconds(14*60+30);
+        progress1.setAlreadyListened(false);
+        user.getProgresses().add(progress1);
+        //endregion
+        Mockito.when(userRepository.findById(10L)).thenReturn(null);
+
+        given().contentType(ContentType.JSON).pathParam("UserId","10")
+                .pathParam("LessonId","10")
+                .when().post("users/{UserId}/lessons/{LessonId}/progresses")
+                .then().statusCode(204)
+                .log().body();
+    }
+    @Test
     void whenPostProgressForUser_thenProgressOfUserShouldBePosted() {
         //region Init
         User user = new User();
