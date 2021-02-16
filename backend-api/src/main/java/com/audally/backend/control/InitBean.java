@@ -71,9 +71,9 @@ public class InitBean {
         lessonRepository.persist(lesson2);
         Lesson lesson3 = new Lesson();
         lesson3.setDescription("This is a lesson about JungleScout and everything you need to know about it.");
-        lesson3.setAudioUrl("https://drive.google.com/file/d/1PkbBfKRql4dSviLOXko0v4i15qmcgK6o/view?usp=sharing");
+        lesson3.setAudioUrl("https://audally-audio-files.s3.eu-central-1.amazonaws.com/One+Piece+Original+SoundTrack+-+Stealty+Night+Shadow.mp3");
         lesson3.setName("JungleScout - What is it?");
-        lesson3.setDuration(LocalTime.of(0,3,56));
+        lesson3.setDuration(LocalTime.of(0,3,27));
         lessonRepository.persist(lesson3);
         Lesson lesson4 = new Lesson();
         lesson4.setDescription("A second kind of Lesson, the 4th one of its kind.");
@@ -88,9 +88,9 @@ public class InitBean {
         lessonRepository.persist(lesson5);
         Lesson lesson6 = new Lesson();
         lesson6.setDescription("This is a Podcast aimed at the new uprising star of the Jungle protection apps.");
-        lesson6.setAudioUrl("https://drive.google.com/file/d/1PkbBfKRql4dSviLOXko0v4i15qmcgK6o/view?usp=sharing");
+        lesson6.setAudioUrl("https://audally-audio-files.s3.eu-central-1.amazonaws.com/AudallyTadeotPresentation5BHIF.mp3");        lesson5.setName("Audally - Is it any good?");
         lesson6.setName("JungleScout - Is this the new future for Jungle Walking?");
-        lesson6.setDuration(LocalTime.of(0,3,56));
+        lesson6.setDuration(LocalTime.of(0,2,8));
         lessonRepository.persist(lesson6);
         Lesson lesson7 = new Lesson();
         lesson7.setDescription("Just a random description that is set for the 7th lesson");
@@ -106,9 +106,9 @@ public class InitBean {
         lessonRepository.persist(lesson8);
         Lesson lesson9 = new Lesson();
         lesson9.setDescription("This is a Podcast aimed at the new uprising star of the Jungle protection apps.");
-        lesson9.setAudioUrl("https://drive.google.com/file/d/1PkbBfKRql4dSviLOXko0v4i15qmcgK6o/view?usp=sharing");
+        lesson9.setAudioUrl("https://audally-audio-files.s3.eu-central-1.amazonaws.com/One+Piece+Original+SoundTrack+-+Stealty+Night+Shadow.mp3");
         lesson9.setName("JungleScout - Let's talk about it?");
-        lesson9.setDuration(LocalTime.of(0,3,56));
+        lesson9.setDuration(LocalTime.of(0,3,27));
         lessonRepository.persist(lesson9);
         Lesson lesson10 = new Lesson();
         lesson10.setDescription("This is a Podcast aimed at the new uprising star");
