@@ -1,5 +1,5 @@
 <template>
-  <div class="flex p-4 justify-between">
+  <div class="flex justify-between p-4">
     <div>
       <button class="text-gray-300 focus:outline-none hover:text-gray-200">
         <svg
@@ -17,10 +17,6 @@
           ></path>
         </svg>
       </button>
-    </div>
-    <div>
-      <LoginButton v-if="!$auth.loggedIn"></LoginButton>
-      <LogoutButton v-else></LogoutButton>
     </div>
   </div>
 </template>
