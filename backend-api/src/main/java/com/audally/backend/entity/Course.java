@@ -33,7 +33,7 @@ public class Course implements Serializable {
     @SequenceGenerator(
             name = "courseSequence",
             sequenceName = "course_id_seq",
-            initialValue = 4,
+            initialValue = 1,
             allocationSize = 1
     )
     @GeneratedValue(

@@ -29,7 +29,7 @@ public class User implements Serializable {
     @SequenceGenerator(
             name = "userSequence",
             sequenceName = "user_id_seq",
-            initialValue = 3,
+            initialValue = 1,
             allocationSize = 1
     )
     @GeneratedValue(
