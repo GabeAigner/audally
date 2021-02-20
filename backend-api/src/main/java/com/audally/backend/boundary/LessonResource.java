@@ -58,8 +58,7 @@ public class LessonResource {
         if(change == null)return Response.noContent().build();
         /*Arrays.stream(lessons)
                 .forEach(l -> {
-                    if (change.lessons.stream()
-                            .anyMatch(lesson -> lesson.equals(l))){
+                    if (change.lessons.stream().anyMatch(lesson -> lesson.equals(l))){
                     }
                 });*/
         AtomicBoolean toDelete = new AtomicBoolean(false);
