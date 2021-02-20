@@ -83,6 +83,7 @@ public class InitBean {
         lessonRepository.persist(lesson4);
         Lesson lesson5 = new Lesson();
         lesson5.setDescription("This is a generic description for our lessons, hoping that we can have a lot of data.");
+        lesson5.setName("This is a generic Name for our lessons");
         lesson5.setAudioUrl("https://audally-audio-files.s3.eu-central-1.amazonaws.com/AudallyTadeotPresentation5BHIF.mp3");
         lesson5.setDuration(LocalTime.of(0,2,8));
         lessonRepository.persist(lesson5);
