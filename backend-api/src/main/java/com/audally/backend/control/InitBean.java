@@ -36,22 +36,18 @@ public class InitBean {
         User john = new User();
         john.setEmail("john@doe.co");
         john.setUserName("john");
-        john.setPassword("john");
         userRepository.persist(john);
         User jane = new User();
         jane.setEmail("jane@doe.co");
         jane.setUserName("jane");
-        jane.setPassword("john");
         userRepository.persist(jane);
         User admin = new User();
         admin.setEmail("admin@admin.co");
         admin.setUserName("admin");
-        admin.setPassword("john");
         userRepository.persist(admin);
         User creator = new User();
         creator.setEmail("creator@creator.co");
         creator.setUserName("creator");
-        creator.setPassword("john");
         userRepository.persist(creator);
     }
 
