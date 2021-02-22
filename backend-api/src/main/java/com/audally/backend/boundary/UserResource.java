@@ -124,6 +124,11 @@ public class UserResource {
                     .status(204,"User does not exist")
                     .build();
         }
+        if(!userRepository.courseIsPresentInUser(user,cid)){
+            return Response
+                    .status(204,"User does not have this Course!")
+                    .build();
+        }
         doLoader(user);
         return Response.ok(progressRepository.getProgressesOfCourse(cid, user))
         .build();
