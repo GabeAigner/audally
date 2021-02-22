@@ -42,9 +42,6 @@ public class User implements Serializable {
     @NotNull
     @Email
     private String email;
-    @NotNull
-    @NotEmpty
-    private String password;
     /*
     @NotNull
     public Date joinDate;
@@ -66,7 +63,6 @@ public class User implements Serializable {
         this.subscriptions = user.getSubscriptions();
         this.courses = user.getCourses();
         this.userName = user.getUserName();
-        this.password = user.getPassword();
         this.progresses = user.getProgresses();
     }
 }
