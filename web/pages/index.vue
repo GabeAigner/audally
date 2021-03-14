@@ -23,11 +23,6 @@
         </div>
       </li>-->
       </div>
-      <PersonalCourses
-        v-if="this.$store.state.personalCourses.length != 0 && $auth.loggedIn"
-        :userid="user.id"
-        @toggleToast="toggleToast(false)"
-      ></PersonalCourses>
     </div>
   </div>
 </template>
