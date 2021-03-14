@@ -86,13 +86,13 @@ public class InitBean {
         Lesson lesson6 = new Lesson();
         lesson6.setDescription("This is a Podcast aimed at the new uprising star of the Jungle protection apps.");
         lesson6.setAudioUrl("https://audally-audio-files.s3.eu-central-1.amazonaws.com/AudallyTadeotPresentation5BHIF.mp3");
-        lesson6.setName("JungleScout - Is this the new future for Jungle Walking?");
+        lesson6.setName("JungleScout - Is this the new future for hiking apps?");
         lesson6.setDuration(LocalTime.of(0,2,8));
         lessonRepository.persist(lesson6);
         Lesson lesson7 = new Lesson();
         lesson7.setDescription("Just a random description that is set for the 7th lesson");
         lesson7.setAudioUrl("https://audally-audio-files.s3.eu-central-1.amazonaws.com/One+Piece+Original+SoundTrack+-+Stealty+Night+Shadow.mp3");
-        lesson7.setName("Hyvebrain - Whats new to the news?");
+        lesson7.setName("Hyvebrain - What's the unique selling point?");
         lesson7.setDuration(LocalTime.of(0,3,27));
         lessonRepository.persist(lesson7);
         Lesson lesson8 = new Lesson();
@@ -205,8 +205,8 @@ public class InitBean {
         //'A memoir by the creator of NIKE', 'Shoe Dog - Phil Knight','https://images.unsplash.com/photo-1556906781-9a412961c28c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80');
         //'The course to achieve a healthier and happier life.', 'Start to be happy!','https://images.unsplash.com/photo-1579722820308-d74e571900a9?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80');
         Course course1 = new Course();
-        course1.setDescription("Tools you can use for your startup that will help in either the project itself or just to cool down from the stress");
-        course1.setName("Good Tools or Apps to use for Startups.");
+        course1.setDescription("Tools you can use for your startup that will help you accomplish things much easier than before.");
+        course1.setName("Tools you can use, to make your Startup life easier!");
         course1.setPictureUrl("https://images.unsplash.com/photo-1509381488012-29d23e254085?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
         course1.getLessons().add(lessonRepository.findById(1L)); //just for current user action cases.
         course1.getLessons().add(lessonRepository.findById(2L));
@@ -227,7 +227,7 @@ public class InitBean {
         courseRepository.persist(course2);
         Course course3 = new Course();
         course3.setDescription("This is a filler that we can use for testing if need be.");
-        course3.setName("Test Number 01 - The Filler Course for everything you need to know.");
+        course3.setName("Everything you need to know about podcasts and how to do them right.");
         course3.setPictureUrl("https://images.unsplash.com/photo-1514064019862-23e2a332a6a6?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=916&q=80");
         course3.getLessons().add(lessonRepository.findById(12L));
         course3.getLessons().add(lessonRepository.findById(13L));
