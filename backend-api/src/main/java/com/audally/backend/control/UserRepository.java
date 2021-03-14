@@ -11,5 +11,8 @@ import javax.transaction.Transactional;
 @ApplicationScoped
 @Transactional
 public class UserRepository implements PanacheRepositoryBase<User,Long> {
-
+    public boolean courseIsPresentInUser(User user, Long cid){
+        return user.getCourses().stream()
+                .anyMatch(course -> course.getId().equals(cid));
+    }
 }

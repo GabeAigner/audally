@@ -151,6 +151,7 @@ Content-Type: application/json
 ###
 DELETE http://localhost:8080/api/lessons/rmvLessonsFromCourse/1
 Content-Type: application/json
+
 [
   {
     "name": "TutorialNr2",
@@ -170,3 +171,4 @@ Content-Type: multipart/form-data
 ###
 POST http://localhost:8080/api/client/multipart
 Content-Type: text/plain
+
