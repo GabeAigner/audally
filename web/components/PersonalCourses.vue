@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="px-4 mt-8 text-3xl font-bold text-gray-300 sm:mb-0">
+    <h1 class="px-4 text-3xl font-bold text-gray-300 sm:mb-0">
       Personal Courses
     </h1>
     <ul
