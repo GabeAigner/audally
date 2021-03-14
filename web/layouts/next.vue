@@ -366,7 +366,7 @@
                       >Get desktop app</a
                     >
                     <a
-                      href="#"
+                      href=""
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
                       >Support</a
@@ -674,6 +674,10 @@
         <!-- Bottom Bar for Audio Player -->
       </main>
     </div>
+    <script
+      src="https://embed.small.chat/T016XT3HG5QC01R00TQ1HC.js"
+      async
+    ></script>
   </div>
 </template>
 
@@ -704,6 +708,8 @@ export default {
     },
     progress() {
       return this.$store.state.currentProgress
+        ? this.$store.state.currentProgress
+        : 0
     },
     user() {
       return this.$store.state.user
@@ -775,7 +781,7 @@ Content-Type: application/json
       // document.getElementById('plyr').src += this.current
       this.audio.pause()
       this.audio.load()
-      this.audio.play()
+      // this.audio.play()
     },
     openMobileMenu() {
       this.other = !this.other
